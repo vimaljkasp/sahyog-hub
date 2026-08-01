@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahyog Hub — Websites, Apps &amp; Meta Ads</title>
+<meta name="description" content="Sahyog Hub builds websites, apps, and geo-targeted Meta ad campaigns for local businesses. Together, we build.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232C3040'/%3E%3Crect x='7' y='8' width='2' height='16' fill='%23F7F5F1'/%3E%3Crect x='7' y='8' width='6' height='2' fill='%23F7F5F1'/%3E%3Crect x='7' y='22' width='6' height='2' fill='%23F7F5F1'/%3E%3Crect x='23' y='8' width='2' height='16' fill='%23B4763C'/%3E%3Crect x='19' y='8' width='6' height='2' fill='%23B4763C'/%3E%3Crect x='19' y='22' width='6' height='2' fill='%23B4763C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=Tiro+Devanagari+Hindi&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #2C3040;
+    --bronze: #B4763C;
+    --bronze-light: #C9925A;
+    --paper: #F7F5F1;
+    --slate: #6E7385;
+    --near-black: #100F0D;
+
+    --bg: var(--paper);
+    --bg-alt: #FFFFFF;
+    --fg: var(--ink);
+    --fg-muted: var(--slate);
+    --accent: var(--bronze);
+    --border: rgba(44,48,64,0.12);
+    --card-shadow: 0 20px 50px -30px rgba(44,48,64,0.35);
+    --btn-bg: var(--ink);
+    --btn-fg: var(--paper);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: var(--near-black);
+      --bg-alt: #1A1917;
+      --fg: var(--paper);
+      --fg-muted: #9BA3AE;
+      --accent: var(--bronze-light);
+      --border: rgba(247,245,241,0.14);
+      --card-shadow: 0 20px 50px -30px rgba(0,0,0,0.6);
+      --btn-bg: var(--paper);
+      --btn-fg: var(--near-black);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: var(--near-black);
+    --bg-alt: #1A1917;
+    --fg: var(--paper);
+    --fg-muted: #9BA3AE;
+    --accent: var(--bronze-light);
+    --border: rgba(247,245,241,0.14);
+    --card-shadow: 0 20px 50px -30px rgba(0,0,0,0.6);
+    --btn-bg: var(--paper);
+    --btn-fg: var(--near-black);
+  }
+  :root[data-theme="light"] {
+    --bg: var(--paper);
+    --bg-alt: #FFFFFF;
+    --fg: var(--ink);
+    --fg-muted: var(--slate);
+    --accent: var(--bronze);
+    --border: rgba(44,48,64,0.12);
+    --card-shadow: 0 20px 50px -30px rgba(44,48,64,0.35);
+    --btn-bg: var(--ink);
+    --btn-fg: var(--paper);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .hindi { font-family: 'Tiro Devanagari Hindi', serif; }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---- Logo mark ---- */
+  .mark { flex: none; display: block; }
+
+  /* ---- Header ---- */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0;
+    gap: 24px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .brand-name {
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -0.02em;
+    color: var(--fg);
+  }
+  nav.links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  nav.links a.navlink {
+    font-size: 14px;
+    color: var(--fg-muted);
+    text-decoration: none;
+  }
+  nav.links a.navlink:hover { color: var(--fg); }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 11px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--btn-bg); color: var(--btn-fg); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--btn-bg) 85%, black); }
+  .btn-outline {
+    background: transparent;
+    color: var(--fg);
+    border-color: var(--border);
+  }
+  .btn-outline:hover { border-color: var(--fg-muted); }
+
+  /* ---- Hero ---- */
+  .hero {
+    position: relative;
+    padding: 110px 0 100px;
+    overflow: hidden;
+  }
+  .hero-inner {
+    position: relative;
+    max-width: 760px;
+  }
+  .eyebrow {
+    font-size: 12px;
+    color: var(--accent);
+    margin: 0 0 20px;
+  }
+  h1.headline {
+    font-size: clamp(36px, 5.6vw, 60px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin: 0 0 24px;
+    text-wrap: balance;
+  }
+  .sub {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--fg-muted);
+    margin: 0 0 36px;
+    max-width: 60ch;
+  }
+  .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  /* ---- Sections generic ---- */
+  section { padding: 88px 0; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 44px;
+  }
+  .section-num { font-size: 12px; color: var(--accent); }
+  h2.section-title {
+    font-size: clamp(26px, 3.4vw, 34px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  /* ---- Services ---- */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 20px;
+  }
+  .service-card {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 32px 28px;
+    box-shadow: var(--card-shadow);
+  }
+  .service-icon {
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    background: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .service-card h3 {
+    font-size: 19px;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+  }
+  .service-card p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--fg-muted);
+    margin: 0;
+  }
+
+  /* ---- Work / case study ---- */
+  .case-study {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .case-study img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    display: block;
+  }
+  .case-tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--paper);
+    margin-bottom: 16px;
+  }
+  .case-study h3 {
+    font-size: 26px;
+    margin: 0 0 14px;
+    letter-spacing: -0.02em;
+  }
+  .case-study p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--fg-muted);
+    margin: 0 0 22px;
+  }
+  .case-stats {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 24px;
+  }
+  .case-stats div strong {
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .case-stats div span {
+    font-size: 12px;
+    color: var(--fg-muted);
+  }
+
+  /* ---- About ---- */
+  .about-row {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .about-copy p {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--fg-muted);
+    margin: 0 0 18px;
+  }
+  .about-copy strong { color: var(--fg); }
+  .devanagari-block {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 40px 32px;
+    text-align: center;
+  }
+  .devanagari-block .word {
+    font-size: 38px;
+    margin-bottom: 12px;
+  }
+  .devanagari-block .translit {
+    font-size: 12px;
+    color: var(--fg-muted);
+  }
+
+  /* ---- Contact ---- */
+  .contact-panel {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 16px;
+    padding: 56px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  .contact-panel h2 {
+    font-size: clamp(26px, 3.2vw, 32px);
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+  }
+  .contact-panel .sub2 {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #C7CBD6;
+    margin: 0 0 28px;
+    max-width: 42ch;
+  }
+  .contact-direct { display: flex; flex-direction: column; gap: 12px; }
+  .contact-direct a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    text-decoration: none;
+    color: var(--paper);
+    border-bottom: 1px solid rgba(247,245,241,0.25);
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .contact-direct a span.label { color: #8A93A3; }
+
+  form.quote-form { display: flex; flex-direction: column; gap: 14px; }
+  .quote-form input, .quote-form select, .quote-form textarea {
+    width: 100%;
+    background: rgba(247,245,241,0.06);
+    border: 1px solid rgba(247,245,241,0.2);
+    border-radius: 6px;
+    padding: 12px 14px;
+    color: var(--paper);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+  }
+  .quote-form input::placeholder, .quote-form textarea::placeholder { color: #8A93A3; }
+  .quote-form textarea { resize: vertical; min-height: 80px; }
+  .quote-form button {
+    background: var(--bronze-light);
+    color: var(--near-black);
+    border: none;
+    border-radius: 6px;
+    padding: 13px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .quote-form button:hover { background: #d9a86e; }
+  .form-note { font-size: 12px; color: #8A93A3; margin-top: -4px; }
+
+  /* ---- Footer ---- */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 48px 0;
+  }
+  .footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .footer-brand { display: flex; align-items: center; gap: 12px; }
+  .footer-tagline { font-size: 11px; color: var(--fg-muted); }
+  .footer-copy { font-size: 12px; color: var(--fg-muted); }
+
+  @media (max-width: 860px) {
+    nav.links a.navlink { display: none; }
+    .services-grid { grid-template-columns: 1fr; }
+    .case-study { grid-template-columns: 1fr; }
+    .about-row { grid-template-columns: 1fr; }
+    .contact-panel { grid-template-columns: 1fr; padding: 36px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav-row">
+    <a class="brand" href="#top">
+      <svg class="mark" width="34" height="23" viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="14" height="100" fill="var(--fg)"/>
+        <rect x="0" y="0" width="47" height="14" fill="var(--fg)"/>
+        <rect x="0" y="86" width="47" height="14" fill="var(--fg)"/>
+        <rect x="136" y="0" width="14" height="100" fill="var(--accent)"/>
+        <rect x="103" y="0" width="47" height="14" fill="var(--accent)"/>
+        <rect x="103" y="86" width="47" height="14" fill="var(--accent)"/>
+        <rect x="66" y="41" width="19" height="19" fill="var(--fg)"/>
+      </svg>
+      <span class="brand-name">Sahyog Hub</span>
+    </a>
+    <nav class="links">
+      <a class="navlink" href="#work">Work</a>
+      <a class="navlink" href="#services">Services</a>
+      <a class="navlink" href="#about">About</a>
+      <a class="btn btn-primary" href="#contact">Get a quote</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-inner">
+        <p class="eyebrow mono">Together, we build</p>
+        <h1 class="headline">Websites, apps and ads that pay for themselves.</h1>
+        <p class="sub">Sahyog Hub is a small, hands-on team building digital presence for local businesses — real estate, retail, services — end to end: design, build, and the marketing that actually brings in customers.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#contact">Get a quote</a>
+          <a class="btn btn-outline" href="#work">See our work</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num mono">01</span>
+        <h2 class="section-title">What we build</h2>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="1.5" stroke="var(--paper)" stroke-width="1.6"/><path d="M3 8h18" stroke="var(--paper)" stroke-width="1.6"/></svg>
+          </div>
+          <h3>Websites</h3>
+          <p>Fast, responsive sites built to convert — from a single-page brochure site to interactive tools like a clickable plot-selection map.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="6" y="2" width="12" height="20" rx="2" stroke="var(--paper)" stroke-width="1.6"/><circle cx="12" cy="18" r="0.8" fill="var(--paper)"/></svg>
+          </div>
+          <h3>Apps</h3>
+          <p>Web and mobile apps for internal operations or customer-facing tools — built on a proven, reliable stack, not a rushed prototype.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z" stroke="var(--paper)" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Meta Ads</h3>
+          <p>Geo-targeted Instagram &amp; Facebook campaigns — reach the exact radius and audience that actually matters for your business.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num mono">02</span>
+        <h2 class="section-title">Recent work</h2>
+      </div>
+      <div class="case-study">
+        <img src="assets/case-study-meera.png" alt="Meera Residency live website — real estate plot marketing site">
+        <div>
+          <span class="case-tag mono">Real Estate</span>
+          <h3>Meera Residency, Nimbahera</h3>
+          <p>A plot-sale project needed a website with a clickable, zoomable layout map, plus a ready-to-post Instagram kit — feed posts, story creative, and a reel template — in Hindi and English, targeted to a 50km radius around the site.</p>
+          <div class="case-stats">
+            <div><strong>71</strong><span>plots mapped</span></div>
+            <div><strong>2</strong><span>languages</span></div>
+            <div><strong>50km</strong><span>ad radius</span></div>
+          </div>
+          <a class="btn btn-outline" href="https://vimaljkasp.github.io/SampleMeera/" target="_blank" rel="noopener">View live site →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num mono">03</span>
+        <h2 class="section-title">Why Sahyog</h2>
+      </div>
+      <div class="about-row">
+        <div class="about-copy">
+          <p><strong>Sahyog (सहयोग) means collaboration</strong> — and that's exactly how we work: closely with you at every step, not just handing over a file at the end.</p>
+          <p>Most agencies specialize in one thing and outsource the rest. We build the website, the app, and the ad campaign together, as one connected effort — so your site, your marketing, and your brand actually say the same thing.</p>
+          <p>Founded by <strong>Vimal</strong>, Sahyog Hub takes on a small number of clients at a time, by design — so every project gets real attention, not a template.</p>
+        </div>
+        <div class="devanagari-block">
+          <div class="word hindi">सहयोग हब</div>
+          <div class="translit mono">Sahyog Hub</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact-panel">
+        <div>
+          <h2>Let's build something together.</h2>
+          <p class="sub2">Tell us a bit about your business and what you need — a new website, an app, or an Instagram campaign — and we'll get back to you.</p>
+          <div class="contact-direct">
+            <a href="tel:+919566812835"><span class="label">Call</span> +91 95668 12835</a>
+            <a href="https://wa.me/919566812835" target="_blank" rel="noopener"><span class="label">WhatsApp</span> +91 95668 12835</a>
+            <a href="mailto:vimaljkasp@gmail.com"><span class="label">Email</span> vimaljkasp@gmail.com</a>
+          </div>
+        </div>
+        <form class="quote-form" id="quoteForm">
+          <input type="text" id="qName" placeholder="Your name" required>
+          <input type="tel" id="qPhone" placeholder="Phone / WhatsApp number" required>
+          <select id="qType">
+            <option value="Website">I need a website</option>
+            <option value="App">I need an app</option>
+            <option value="Marketing">I need Instagram/Meta ads</option>
+            <option value="Not sure">Not sure yet</option>
+          </select>
+          <textarea id="qMessage" placeholder="A little about your business..."></textarea>
+          <button type="submit">Send via WhatsApp →</button>
+          <p class="form-note">Opens WhatsApp with your details pre-filled — nothing is stored on this site.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div class="footer-brand">
+      <svg class="mark" width="26" height="17.5" viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="14" height="100" fill="var(--fg)"/>
+        <rect x="0" y="0" width="47" height="14" fill="var(--fg)"/>
+        <rect x="0" y="86" width="47" height="14" fill="var(--fg)"/>
+        <rect x="136" y="0" width="14" height="100" fill="var(--accent)"/>
+        <rect x="103" y="0" width="47" height="14" fill="var(--accent)"/>
+        <rect x="103" y="86" width="47" height="14" fill="var(--accent)"/>
+      </svg>
+      <div>
+        <div class="brand-name" style="font-size:15px;">Sahyog Hub</div>
+        <div class="footer-tagline mono">Together, we build</div>
+      </div>
+    </div>
+    <div class="footer-copy">© 2026 Sahyog Hub, Rajasthan, India</div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('quoteForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('qName').value.trim();
+    const phone = document.getElementById('qPhone').value.trim();
+    const type = document.getElementById('qType').value;
+    const message = document.getElementById('qMessage').value.trim();
+    const text = `Hi Sahyog Hub, I'm ${name} (${phone}).\nI need: ${type}\n${message}`;
+    window.open('https://wa.me/919566812835?text=' + encodeURIComponent(text), '_blank');
+  });
+</script>
+
+</body>
+</html>
