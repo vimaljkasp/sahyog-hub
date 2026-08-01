@@ -92,10 +92,10 @@ Loaded via Google Fonts CDN — **this only works when hosted normally** (e.g. G
 ---
 
 ## What Still Needs To Be Done
-- [ ] **Hosting/domain** — deploy to a real domain or GitHub Pages (same pattern as the Meera Residency site)
+- [x] **Hosting/domain** — LIVE at sahyoghub.com / www.sahyoghub.com via Cloudflare Pages, repo https://github.com/vimaljkasp/sahyog-hub
+- [x] **Analytics** — Cloudflare Web Analytics enabled (automatic setup, zone-wide, zero code changes) — covers sahyoghub.com, www, and meeraresidency.sahyoghub.com
 - [ ] **More case studies** — currently only one (Meera Residency); add more as new client work is completed
 - [ ] **Testimonials** — no client testimonials yet
-- [ ] **Analytics** — no tracking installed
 - [ ] **Favicon polish** — currently a small inline SVG data-URI favicon (32px, no center dot per brand rule); fine for now but a proper multi-size favicon set could be added later
 - [ ] **Instrument Serif** — reserved in the brand system for "editorial accents" but not yet used anywhere on the live page
 
