@@ -62,7 +62,9 @@ Loaded via Google Fonts CDN — **this only works when hosted normally** (e.g. G
 1. **Header/Nav** — logo mark + wordmark, sticky, nav links (Work / Services / About) + "Get a quote" button (button stays visible on mobile even though nav links collapse)
 2. **Hero** — headline "Websites, apps and ads that pay for themselves.", tagline eyebrow, two CTAs
 3. **Services (01)** — three cards: Websites, Apps, Meta Ads
-4. **Recent Work (02)** — case study: Meera Residency, Nimbahera, with a real screenshot of the live site (captured via html2canvas, not the Instagram poster mockup), stats (71 plots mapped / 2 languages / 50km ad radius), link to the live site
+4. **Recent Work (02)** — two case studies, each with a real screenshot of the live site (captured via html2canvas) and a link to it:
+   - Meera Residency, Nimbahera — stats (71 plots mapped / 2 languages / 50km ad radius)
+   - Shree Leela Restaurant — stats (130 menu items / 19 categories / 2 languages), image-right layout (alternates with Meera's image-left) for visual rhythm
 5. **Why Sahyog (03)** — brand meaning, approach, founder credit, Devanagari wordmark block
 6. **Contact / Get a quote** — direct Call/WhatsApp/Email links + a form that opens WhatsApp with the visitor's details pre-filled via `wa.me` deep link (no backend, nothing stored)
 7. **Footer** — logo, tagline, copyright
@@ -81,6 +83,7 @@ Loaded via Google Fonts CDN — **this only works when hosted normally** (e.g. G
 **Files:**
 - `index.html` — the site
 - `assets/case-study-meera.png` — live screenshot of the Meera Residency site used as case-study proof
+- `assets/case-study-leela.jpg` — live screenshot of the Shree Leela Restaurant site used as case-study proof
 
 ---
 
@@ -94,7 +97,7 @@ Loaded via Google Fonts CDN — **this only works when hosted normally** (e.g. G
 ## What Still Needs To Be Done
 - [x] **Hosting/domain** — LIVE at sahyoghub.com / www.sahyoghub.com via Cloudflare Pages, repo https://github.com/vimaljkasp/sahyog-hub
 - [x] **Analytics** — Cloudflare Web Analytics enabled (automatic setup, zone-wide, zero code changes) — covers sahyoghub.com, www, and meeraresidency.sahyoghub.com
-- [ ] **More case studies** — currently only one (Meera Residency); add more as new client work is completed
+- [ ] **More case studies** — now has two (Meera Residency, Shree Leela Restaurant); add more as new client work is completed
 - [ ] **Testimonials** — no client testimonials yet
 - [ ] **Favicon polish** — currently a small inline SVG data-URI favicon (32px, no center dot per brand rule); fine for now but a proper multi-size favicon set could be added later
 - [ ] **Instrument Serif** — reserved in the brand system for "editorial accents" but not yet used anywhere on the live page
@@ -104,5 +107,5 @@ Loaded via Google Fonts CDN — **this only works when hosted normally** (e.g. G
 ## Related Files
 - Source website: `C:\Claude\Projects\sahyog-hub\SourceCode\index.html`
 - Brand sheet (Claude Design project, still under its original name): `Sahyog Studio Premium Logo`, files `Sahyog Studio Brand Sheet.dc.html`, `Sahyog Studio Logo.dc.html`, `Sahyog Studio Logo - Tagline.dc.html`
-- Related client project referenced as case study: `C:\Claude\Projects\meera-residency`
+- Related client projects referenced as case studies: `C:\Claude\Projects\meera-residency`, `C:\Claude\Projects\shree-leela-restaurant`
 - Superseded folder (old name, kept until cleanup): `C:\Claude\Projects\sahyog-studio` — content is stale, use `sahyog-hub` instead
