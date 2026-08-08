@@ -99,7 +99,9 @@ An unrecognised route falls back to Home.
 
 **Files:**
 - `index.html` — the whole site
-- `assets/ill-desk-charts.png`, `ill-whiteboard.png`, `ill-desktop-code.png`, `ill-armchair-tablet.png`, `ill-bean-mail.png` — the design's 3D illustrations (RGBA, see below)
+- `assets/ill-*.webp` ×5 — what browsers actually download (179 KB total)
+- `assets/ill-*.png` ×5 — the design's original 3D illustrations, RGBA; fallback only (see below)
+- `assets/og-image.jpg` — 1200×630 social preview card
 - `assets/case-study-meera.png`, `case-study-leela.jpg`, `case-study-mewad.jpg` — real live-site screenshots
 
 > **Screenshots go stale when a client site is redesigned.** `case-study-mewad.jpg` was re-captured on 2026-08-07 because Mewad Gir Farms had been rebuilt on its "Olive" design — the old capture showed the retired dark theme with a blank box where the hero video sat. Meera and Shree Leela were checked at the same time and still match (verified by page background: `#0c1520` navy and `#2a1512` maroon respectively). **Re-check all three whenever a client site is redesigned.** Capture with html2canvas at an explicit width/height — on some of these sites `window.innerWidth/innerHeight` read 0, which silently produces a 0×0 canvas.
@@ -122,7 +124,27 @@ They could **not** be fetched through DesignSync: `get_file` caps reads at 256 K
 
 All five are **RGBA with real transparency** — they sit directly on the white and peach `#fff0e8` bands. Do **not** convert them to JPEG; that would drop the alpha and put a white box on the peach sections.
 
-**Loading strategy (matters — they total ~2.3 MB).** All four pages live in the DOM at once, so a naive build would pull all 2.3 MB on first paint. Instead:
+**Served as WebP — the PNGs are fallback only.** The source PNGs total 2.3 MB, which was far too heavy for customers on mobile data. Each is now also shipped as WebP and delivered via `<picture>`:
+
+```html
+<picture style="display:block;width:100%;max-width:470px;margin-left:auto">
+  <source srcset="assets/ill-desk-charts.webp" type="image/webp">
+  <img src="assets/ill-desk-charts.png" width="658" height="802" …>
+</picture>
+```
+
+| | PNG | WebP |
+|---|---|---|
+| Five illustrations | 2,310 KB | **179 KB** (−92%) |
+| Hero alone (LCP) | 487 KB | **40 KB** |
+
+Any browser without WebP support silently gets the PNG; Chrome never requests it (verified — `currentSrc` is `.webp` for all five).
+
+> **How the WebP files were made:** no `sharp`, `cwebp` or ImageMagick is available in this environment (and note `convert` on Windows' PATH is the filesystem utility, *not* ImageMagick). They were encoded with **Chrome's own canvas encoder** — `fetch` the PNG same-origin → `createImageBitmap` → `canvas.toDataURL('image/webp', 0.86)` → decode the base64 to disk. Same trick works for re-encoding later. Verified afterwards that every file has a `RIFF/WEBP/VP8X` header **with the alpha flag set** — alpha matters, these sit on the peach bands and a flattened version would show a white box.
+
+**Sizing lives on the `<picture>`, not the `<img>`.** `<picture>` is inline by default and shrinks to fit, so `margin-left:auto` / `margin:0 auto` on the inner `<img>` would silently stop positioning anything. The wrapper carries `display:block;width:100%;max-width:…` and the img is just `width:100%;height:auto;display:block`.
+
+**Loading strategy.** All four pages live in the DOM at once, so a naive build would pull every illustration on first paint. Instead:
 - The hero (`ill-desk-charts`) is eager with `fetchpriority="high"` — it is the LCP element.
 - Every other illustration carries `loading="lazy" decoding="async"`. Because the Services and Contact pages are `display:none` until routed to, their images are never fetched until the visitor actually opens those pages.
 - Verified: Home first paint requests **2** illustrations, not 5; the other three arrive only on navigating to Services.
@@ -178,12 +200,12 @@ Note for future sessions: `html2canvas` cannot rasterise externally-referenced S
 - [x] **Hosting/domain** — LIVE at sahyoghub.com / www.sahyoghub.com via Cloudflare Pages, repo https://github.com/vimaljkasp/sahyog-hub
 - [x] **Analytics** — Cloudflare Web Analytics, zone-wide, zero code changes
 - [x] **Real illustrations** — the design's five PNGs are in, lazy-loaded (see above)
-- [ ] **Image weight** — the five PNGs total ~2.3 MB. Lazy loading keeps first paint down to ~890 KB, but the hero alone is 487 KB. Worth recompressing (PNG-8 palette, or WebP with a PNG fallback) if mobile load feels slow — these are flat illustrations and should compress hard.
-- [ ] **Testimonials** — add once real client quotes exist (see above)
-- [ ] **Refresh or retire the bronze-era brand artefacts** in `Docs/` — they no longer match the live site
-- [ ] **Logo mark** — the new design is wordmark-only; decide whether the bracket mark is retired or gets an orange version for the favicon/social avatar
-- [ ] **Favicon** — currently an orange tile with a white "S" data-URI; a proper multi-size set would be better
-- [ ] **og:image** — no social preview image yet
+- [x] **Image weight** — WebP via `<picture>`, 2,310 KB → 179 KB (−92%); hero 487 KB → 40 KB
+- [x] **og:image** — 1200×630 card at `assets/og-image.jpg`, wired up with Open Graph + Twitter tags
+- [x] **Bronze-era artefacts** — moved to `Docs/archive-bronze/` with a README explaining what they were and why they no longer apply
+- [ ] **Testimonials** — still blocked on real client quotes. See above; inventing them is not an option.
+- [ ] **Logo mark** — the new design is wordmark-only; decide whether the bracket mark is retired for good or gets an orange version for the favicon and social avatar
+- [ ] **Favicon** — currently an orange tile with a white "S" as an inline data-URI; a proper multi-size set (and a real social avatar) would be better
 - [ ] **More case studies** — three so far
 
 ---
