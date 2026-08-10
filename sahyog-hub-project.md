@@ -17,7 +17,7 @@ The site was rebuilt on an entirely new design, replacing the previous single-sc
 | Brand colour | Bronze `#B4763C` on ink `#2C3040` | **Orange `#ea6018`** on white, with peach `#fff0e8` bands |
 | Fonts | Space Grotesk + IBM Plex Mono | **Poppins** (display) + **DM Sans** (text) |
 | Logo | Two-bracket mark `[ · ]` | **Wordmark only** — "Sah**yog** Hub" with "yog" in orange. No icon mark in the design. |
-| Structure | One scrolling page, anchor links | **Four pages** — Home / Services / Work / Contact |
+| Structure | One scrolling page, anchor links | **Four pages** — Home / Services / Work / Contact *(superseded 2026-08-10 — see Site Structure; it is a single scrolling page again)* |
 | Dark mode | Full light + dark theming | **Light only** — the design ships no dark palette |
 
 **This is a real brand shift, not just a reskin.** The bronze/ink brand sheet (`Sahyog Studio Premium Logo` design project) and the artefacts in `Docs/` (`logo-directions.png`, `logo-s-ribbon.png`, `illustrations.png`) are all now **out of date** relative to the live site. Either refresh them to orange or treat them as historical.
@@ -26,7 +26,7 @@ The site was rebuilt on an entirely new design, replacing the previous single-sc
 - Real contact details: +91 95668 12835 (call + WhatsApp), vimaljkasp@gmail.com
 - The WhatsApp-deep-link quote form (no backend, nothing stored)
 - All three case studies and their real live-site screenshots
-- "Founded by Vimal · Rajasthan, India", the सहयोग / "Together, we build" line
+- The सहयोग / "Together, we build" line *(the "Founded by Vimal" credit was removed on the owner's request, 2026-08-07 — do not reinstate it from a design import)*
 - Live links to all three client sites
 
 ---
@@ -69,38 +69,61 @@ Fonts load from Google Fonts CDN — fine on normal hosting, would fail under a 
 
 ---
 
-## Site Structure
-Hash-routed single file. All four pages exist in the DOM at once and are toggled by a CSS class, so the content stays crawlable while URLs remain shareable and the back button works.
+## Site Structure — single scrolling page
 
-Routes: `#/` · `#/services` · `#/work` · `#/contact`
-Deep links into a service block: `#/services#svc-websites`, `#svc-apps`, `#svc-ads` (the router parses the second `#` as an anchor and scrolls to it with a 92px header offset).
-An unrecognised route falls back to Home.
+**Changed 2026-08-10 ("Kinetic").** The four hash-routed pages are gone. Everything is now one scrolling page with anchor navigation, per the `Sahyog Hub Kinetic.dc.html` design.
 
-**Home** — hero (headline, two CTAs, confetti dots, desk illustration) · "What We Build" three service cards on the peach band · "Simple Solutions!" four-step process + whiteboard illustration · "Recent Work" three client cards on the peach band.
+Anchors: `#services` · `#work` · `#process` · `#contact` (plus `#top`). Plain native anchor links — no router, and no JS is required to navigate. `html{scroll-behavior:smooth}` is the only enhancement, and it degrades to an instant jump.
 
-> **Work cards carry proof, not just a name.** Each card (Home *and* the Work page) shows: a category eyebrow, a green "Live" dot, the project title, a one-line outcome, a row of feature pills (`.tags`), and the **live domain spelled out** as a link rather than a generic "View live site". The point is that a prospect can read what was actually built and click straight through to a working example. Pills wrap to two rows on mobile; verified clean at 320px.
-**Services** — three alternating image/text blocks (Websites / Apps / Marketing Ads), each with a tick list; the Ads block has three sub-groups (Instagram, Facebook, both together).
-**Work** — Meera Residency full-width feature, then Shree Leela + Mewad Gir Farms side by side.
-**Contact** — call/WhatsApp/email cards + the quote form.
-**CTA banner** — "Ready to get started?", overlaps the footer via `translateY(50%)`. Hidden on Contact (it links to the page you'd already be on).
-**Footer** — wordmark, social/contact icon buttons, Services / Work / Contact columns, orange copyright bar.
+**Header** — not sticky (the design does not make it so; it scrolls away).
+**Hero** — eyebrow, a two-line headline where each line rises out of an `overflow:hidden` clip, lead paragraph + two CTAs side by side, then **three illustrations in a row** that pop in and then idle-float on staggered loops.
+**Ticker** — full-bleed orange marquee, duplicated track scrolling `translateX(-50%)` over 30s.
+**Services** — three cards, each now with a **three-point bullet list** under the description. Note the middle card is "Applications", not "Apps", in this design.
+**Work** — three client cards on the peach band.
+**Process** — a horizontal rule that draws itself in (`scaleX(0)` → `scaleX(1)`), then four numbered steps.
+**Contact** — heading, call/WhatsApp/email cards, floating armchair illustration, quote form.
+**Footer** — wordmark + tagline, Services / Work / Contact columns, orange copyright bar.
+
+There is no CTA banner in this design, and no separate Services/Work pages.
+
+> **Work cards keep the proof detail added on 2026-08-07** — category eyebrow, green "Live" dot, feature pills, and the **live domain spelled out** instead of a generic "View live site". The Kinetic design specifies the plainer version; this was kept deliberately because it was an explicit owner request and is purely additive.
+
+> **The footer tagline in the design reads "…founded by Vimal".** That was dropped — the owner asked on 2026-08-07 for their name to come off the site. Do not reinstate it when re-importing a design.
+
+---
+
+## Motion
+
+Keyframes are all prefixed `k-`: `k-rise` (headline lines), `k-in` (fades), `k-float` (idle bob), `k-ticker` (marquee), `k-pop` (hero illustration entrance).
+
+**Reveals use CSS transitions, not keyframes, and are driven by IntersectionObserver.** Two reasons, both found the hard way:
+
+1. The design puts fixed `animation-delay` values on every section, and they all start on page load. Anything below the fold therefore finishes animating before it is ever scrolled into view, so the visitor sees nothing happen. Observing intersection is what "kinetic" is actually reaching for.
+2. With keyframes plus `both` fill, the `prefers-reduced-motion` override (`*{animation:none}`) would strand elements on their `opacity:0` first frame — a blank page for anyone with that setting enabled. Transitions degrade to "just visible" instead.
+
+**Three guards stop content ever being stranded invisible.** This matters because the reveal pattern hides content by default and relies on JS to show it:
+
+- The hidden start state is scoped behind a `.js` class set **synchronously in `<head>`**. No JS — blocked, failed, ancient browser — means nothing is ever hidden in the first place.
+- `prefers-reduced-motion` reveals everything immediately with no transitions.
+- A **1500 ms `setTimeout` safety net**: if no `.rv` element has revealed by then, force them all visible via a `.now` class that also kills the transition. `IntersectionObserver` and `requestAnimationFrame` do **not** run while a page is not being composited (background tab, some embedded viewers); timers still do. Without this the page can render blank — which was observed in practice during this build, not theorised.
 
 ---
 
 ## Tech Stack
 | Technology | Usage |
 |------------|-------|
-| **HTML5** | Single file, four `.page` sections toggled by class |
-| **CSS3** | Design tokens as custom properties, Grid/Flexbox, `auto-fit minmax` responsive columns, one media query at 860px for the nav |
-| **Vanilla JS** | Hash router, mobile drawer, quote-form validation + WhatsApp deep link. ~90 lines, no dependencies. |
-| **Inline SVG** | All icons (hand-written equivalents of the design's Lucide glyphs — the design masked them from a `unpkg` CDN, which would have added a runtime dependency) |
-| **SVG files** | Five illustrations in `assets/` |
+| **HTML5** | Single file, one scrolling document with anchor sections |
+| **CSS3** | Design tokens as custom properties, Grid/Flexbox, `auto-fit minmax` responsive columns, one media query at 860px for the nav, one for the iOS input-zoom fix |
+| **Vanilla JS** | Mobile drawer, IntersectionObserver reveals + safety net, quote-form validation and WhatsApp deep link. ~80 lines, no dependencies. |
+| **Inline SVG** | All icons (hand-written equivalents of the design's Lucide glyphs — the design masks them from a `unpkg` CDN, which would have added a runtime dependency) |
 | **Google Fonts CDN** | Poppins, DM Sans |
 
 **Files:**
 - `index.html` — the whole site
 - `assets/ill-*.webp` ×5 — what browsers actually download (179 KB total)
 - `assets/ill-*.png` ×5 — the design's original 3D illustrations, RGBA; fallback only (see below)
+
+> `ill-desktop-code.*` is **currently unreferenced** — the Kinetic design uses only four illustrations (whiteboard, desk-charts, bean-mail in the hero; armchair-tablet in contact). Both its PNG and WebP are kept rather than deleted: they cost no bandwidth (nothing requests them) and the design has changed twice in a week.
 - `assets/og-image.jpg` — 1200×630 social preview card
 - `assets/case-study-meera.png`, `case-study-leela.jpg`, `case-study-mewad.jpg` — real live-site screenshots
 
@@ -168,31 +191,33 @@ Each `<img>` also carries its true intrinsic `width`/`height` so the aspect rati
 | Service deep-links (`#/services#svc-apps`) switched page but never scrolled | Only used `window.scrollTo({behavior:"smooth"})`, which is deferred indefinitely in embedded/preview contexts — the original design's author had already hit this and shipped a fallback, which was lost in reimplementation | Restored the fallback: after 380ms, if `pageYOffset` is still >4px from target, set `scrollingElement.scrollTop` directly |
 | Top ~13px of all three service icon tiles was clipped off | One `.card-flush` class carrying `overflow:hidden` was applied to both the service and work cards. Work cards *must* clip (so the screenshot corners follow the card radius) but service cards must not — their icon tile is positioned at `top:-14px` to overhang the card edge. The design used two separate prop sets (`cardFillProps` vs `cardClipProps`) for exactly this reason. | Split into `.card-flush` (no clip, service cards) and `.card-clip` (clips, work cards) |
 | iOS Safari zoomed the viewport whenever a quote-form field was focused, leaving visitors pinched in | All five controls inherited `--fs-body` (15px). iOS force-zooms any focused control under 16px. | `@media(max-width:859px){.field input,.field select,.field textarea{font-size:16px}}`. **This rule must stay *after* the `.field` block** — it has identical specificity, so source order is what makes it win. Desktop stays 15px as designed. |
+| *(Kinetic)* Whole page could render **blank** | The reveal pattern hides content by default and reveals it with JS. `IntersectionObserver` and `requestAnimationFrame` do not run while a page is not being composited, so nothing ever revealed. Observed live, not hypothetical. | Three layers: a `.js` class set synchronously in `<head>` so the hidden state only applies when JS runs at all; immediate reveal under `prefers-reduced-motion`; and a 1500 ms `setTimeout` net that force-reveals with transitions disabled. See **Motion**. |
+| *(Kinetic)* Scrolling and sticky positioning broken | `overflow-x:hidden` on `body`. Per spec, setting one axis to non-`visible` forces the other to compute to `auto` — measured: `body` `overflow-y` became `auto` with `clientHeight` 6878px, i.e. body became a scroll container the full height of the document. | Removed it. The hero and ticker already clip themselves, and a 320px audit confirms nothing else overflows, so no page-level clip is needed. Verified `body` `overflow-y` is back to `visible`. |
 
 ---
 
-## Mobile Audit (2026-08-07)
-Swept **320×720, 375×812 and 414×896**, across all four routes, checking every element in the active page plus header, footer and CTA banner:
-- **Horizontal overflow: none** at any width — `document.scrollWidth` equals the viewport exactly (320/375/414), and zero elements extend past either edge.
-- **Tap targets: none under 40px** anywhere — every link, button, input, select and textarea clears it.
-- **Text: nothing under 12px** rendered.
-- Drawer nav opens, sets `aria-expanded`, and closes on navigation. Work-card feature pills wrap to two rows cleanly. CTA banner stacks and still straddles the footer.
-- One real defect found and fixed: the iOS input-zoom issue (see the bug table above).
+## Mobile Audit + Testing (2026-08-10, "Kinetic" build)
 
-> **Caching gotcha while testing:** `npx serve` plus browser caching served a stale `index.html` and made a correct CSS fix look like it had failed. If a change appears not to apply, reload with a cache-busting query (`location.replace('/?v='+Date.now())`) before assuming the CSS is wrong. The fix above was verified only after a busted reload.
+Swept **320×720, 375×812 and 414×896**, plus desktop 1280. Zero console errors throughout.
 
----
+- **Horizontal overflow: none** at any width — `document.scrollWidth` equals the viewport exactly. The only elements wider than the viewport are inside `.ticker-track`, which is deliberately over-wide and clipped by `.ticker{overflow:hidden}`.
+- **Tap targets:** nothing under 40px except the header's `btn-sm` "Get A Quote" at 34px — that is the design's own `--control-h-sm`, it only renders at ≥860px where the pointer is a mouse, and the mobile drawer's equivalent is a 50px `btn-lg`. Not a touch-target defect.
+- **Section flow:** services → work → process → contact tile contiguously with zero gaps (987/1588/2429/2937 at 1280px).
+- **Form:** empty submit blocked with both field errors; a 5-digit phone still blocked; valid submit produces the correct `https://wa.me/919566812835?text=…` with a well-formed message.
+- **Links:** all `tel:`/`wa.me`/`mailto:` point at the real number and address; all three external client links carry `rel="noopener"`; the owner's name appears nowhere in the copy.
+- **Drawer:** opens, sets `aria-expanded`, and closes when a link inside it is used.
+- **Images:** all three hero illustrations serve `.webp`; the contact illustration stays deferred until scrolled to; no broken images.
+- **Fields:** 16px on mobile (iOS zoom fix holds), 15px on desktop.
 
-## Testing Done (2026-08-07)
-Local server, desktop + mobile (375×812), zero console errors throughout.
-- **Routing:** all four routes activate the right page and the right nav item; unknown route (`#/bogus`) falls back to Home; CTA banner hides only on Contact.
-- **Deep links:** all three `#svc-*` anchors land the target at exactly 92px from the viewport top.
-- **Form:** empty submit blocked with both field errors shown; a 5-digit phone still blocked; valid submit produces `https://wa.me/919566812835?text=...` with a correctly composed message.
-- **Links:** 38 links audited — all `tel:`/`wa.me`/`mailto:` point at the real number and address; all three external client links carry `rel="noopener"`.
-- **Mobile:** burger shows / desktop nav hides below 860px; drawer opens, sets `aria-expanded`, and closes on navigation; no horizontal overflow (`scrollWidth` = 375).
-- **Assets:** all five illustrations and all three screenshots return 200.
+### Not verifiable in this environment
+The preview pane was **not compositing** during this build, which means `IntersectionObserver`, `requestAnimationFrame`, CSS transitions and **scrolling itself** were all inert — assigning `scrollingElement.scrollTop` returned 0. So the following were reasoned about and guarded, but **not** observed working end to end:
 
-Note for future sessions: `html2canvas` cannot rasterise externally-referenced SVG `<img>`, so any capture of this page shows blank illustration slots. That is a capture artefact, not a site bug — real browser screenshots render them fine.
+- the staggered reveal animations actually playing,
+- anchor-link scrolling landing on each section.
+
+Both are ordinary browser behaviour and the fallbacks are in place, but they are worth a quick manual check on the live site.
+
+> **Two testing gotchas worth remembering.** (1) `npx serve` plus browser caching will serve a stale `index.html` and make a correct fix look broken — reload with `location.replace('/?v='+Date.now())` before doubting the CSS. (2) `html2canvas` cannot rasterise externally-referenced images, so page captures show blank illustration slots; that is a capture artefact, not a site bug.
 
 ---
 
@@ -212,7 +237,7 @@ Note for future sessions: `html2canvas` cannot rasterise externally-referenced S
 
 ## Related Files
 - Source website: `C:\Claude\Projects\sahyog-hub\SourceCode\index.html`
-- Current design project: `aacceed7-8584-4492-8c98-b76ed872b64c` — `Sahyog Hub Website.dc.html`, `Sahyog Hub Logo.dc.html`
+- Current design project: `aacceed7-8584-4492-8c98-b76ed872b64c` — **`Sahyog Hub Kinetic.dc.html` is the one the live site is built on** (2026-08-10). `Sahyog Hub Website.dc.html` in the same project is the superseded four-page version; `Sahyog Hub Logo.dc.html` is the wordmark.
 - Superseded bronze brand sheet: design project `5f9ff2f5-ed87-4349-8081-0fa0f468f410` (`Sahyog Studio Premium Logo`)
 - Client projects used as case studies: `C:\Claude\Projects\meera-residency`, `C:\Claude\Projects\shree-leela-restaurant`, `C:\Claude\Projects\mewad-gir-farms`
 - Shared static-site conventions: `C:\Claude\Projects\StaticSiteTemplate.md`

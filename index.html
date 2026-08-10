@@ -24,26 +24,25 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<!-- Synchronous, before first paint: only hide reveal targets if JS is really running. -->
+<script>document.documentElement.className += " js";</script>
 <style>
 :root{
 --orange-50:#fff5ef;--orange-100:#ffe6d7;--orange-200:#ffd0b5;--orange-300:#fbb089;
 --orange-400:#f5854f;--orange-500:#ea6018;--orange-600:#d55311;--orange-700:#b1420b;
---orange-800:#8a3308;--orange-900:#5e2205;
---ink-900:#1e1e1e;--ink-800:#2f2f2f;--ink-700:#4e4e4e;--ink-600:#6b6b6b;--ink-500:#8a8a8a;
---ink-400:#b4b4b4;--ink-300:#d8d8d8;--ink-200:#ececec;--ink-100:#f6f6f6;--white:#ffffff;
---accent-yellow:#f5c400;--accent-green:#22c55e;--accent-violet:#7c5cf0;--accent-red:#ef3d18;
---danger:#ef3d18;
+--ink-900:#1e1e1e;--ink-700:#4e4e4e;--ink-600:#6b6b6b;--ink-500:#8a8a8a;
+--ink-300:#d8d8d8;--ink-200:#ececec;--ink-100:#f6f6f6;--white:#ffffff;
+--accent-yellow:#f5c400;--accent-green:#22c55e;--accent-violet:#7c5cf0;--danger:#ef3d18;
 --brand:var(--orange-500);--brand-hover:var(--orange-600);--brand-press:var(--orange-700);
---brand-soft:var(--orange-100);--brand-tint:var(--orange-50);
+--brand-tint:var(--orange-50);
 --surface-page:var(--white);--surface-warm:#fff0e8;--surface-card:var(--white);
---surface-sunken:var(--ink-100);
 --text-heading:var(--ink-900);--text-body:var(--ink-600);--text-muted:var(--ink-500);
 --text-on-brand:var(--white);--text-link:var(--brand);
 --border-subtle:var(--ink-200);--border-card:#f1e7e0;--border-brand:var(--orange-500);
 
 --font-display:"Poppins","Segoe UI",system-ui,sans-serif;
 --font-text:"DM Sans","Segoe UI",system-ui,sans-serif;
---fs-display:56px;--fs-h1:44px;--fs-h2:34px;--fs-h3:24px;--fs-h4:18px;
+--fs-h1:44px;--fs-h3:24px;--fs-h4:18px;
 --fs-body-lg:17px;--fs-body:15px;--fs-body-sm:14px;--fs-caption:12.5px;--fs-micro:11px;
 --lh-tight:1.15;--lh-heading:1.25;--lh-body:1.6;
 --fw-regular:400;--fw-medium:500;--fw-semibold:600;--fw-bold:700;
@@ -54,27 +53,29 @@
 --gutter:24px;--container-max:1140px;--section-py:96px;--section-py-sm:64px;
 --control-h-sm:34px;--control-h-md:42px;--control-h-lg:50px;
 
---r-xs:4px;--r-sm:6px;--r-md:10px;--r-lg:14px;--r-pill:999px;--r-circle:50%;
+--r-xs:4px;--r-sm:6px;--r-md:10px;--r-pill:999px;--r-circle:50%;
 --radius-button:var(--r-sm);--radius-card:var(--r-md);--radius-tile:var(--r-md);
---radius-input:var(--r-sm);
---border-w:1px;
+--radius-input:var(--r-sm);--border-w:1px;
 --shadow-card:0 6px 18px rgba(93,58,32,.08);
 --shadow-card-hover:0 12px 28px rgba(93,58,32,.14);
 --shadow-tile:0 6px 14px rgba(30,30,30,.16);
---shadow-float:0 18px 44px rgba(30,30,30,.16);
 --shadow-inset-field:inset 0 1px 2px rgba(30,30,30,.05);
---ease-standard:cubic-bezier(.4,0,.2,1);--ease-out-soft:cubic-bezier(.22,.61,.36,1);
+--ease:cubic-bezier(.4,0,.2,1);--ease-out-soft:cubic-bezier(.22,.61,.36,1);
 --dur-fast:120ms;--dur-base:200ms;
---transition-control:background-color var(--dur-base) var(--ease-standard),color var(--dur-base) var(--ease-standard),border-color var(--dur-base) var(--ease-standard),box-shadow var(--dur-base) var(--ease-standard);
+--transition-control:background-color var(--dur-base) var(--ease),color var(--dur-base) var(--ease),border-color var(--dur-base) var(--ease),box-shadow var(--dur-base) var(--ease);
 --transition-lift:transform var(--dur-base) var(--ease-out-soft),box-shadow var(--dur-base) var(--ease-out-soft);
 }
 
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
+/* No overflow-x:hidden on body — it forces overflow-y to compute to `auto`, which
+   turns body into a scroll container the full height of the content and breaks
+   scrolling and sticky positioning. The hero and ticker clip themselves instead. */
 body{margin:0;font-family:var(--font-text);font-size:var(--fs-body);line-height:var(--lh-body);color:var(--text-body);background:var(--surface-page);-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4{font-family:var(--font-display);color:var(--text-heading);line-height:var(--lh-heading);letter-spacing:var(--ls-heading);margin:0}
-a{color:var(--text-link);text-decoration:none;transition:color var(--dur-base) var(--ease-standard)}
+h1,h2,h3{font-family:var(--font-display);color:var(--text-heading);line-height:var(--lh-heading);letter-spacing:var(--ls-heading);margin:0}
+a{color:var(--text-link);text-decoration:none;transition:color var(--dur-base) var(--ease)}
 a:hover{color:var(--brand-hover)}
-img,svg{max-width:100%}
+img{max-width:100%}
 ::selection{background:var(--orange-200);color:var(--ink-900)}
 :focus-visible{outline:1px solid var(--brand);outline-offset:3px;border-radius:var(--r-xs);box-shadow:0 0 0 3px var(--orange-100)}
 
@@ -84,10 +85,43 @@ img,svg{max-width:100%}
 .sec-warm{background:var(--surface-warm)}
 .eyebrow{font-size:var(--fs-micro);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--brand);font-weight:var(--fw-medium)}
 .accent{color:var(--brand)}
-.muted{color:var(--text-muted)}
+
+/* ---------- kinetics ----------
+   Reveals use transitions, not keyframes: with keyframes + `both`, the
+   reduced-motion `animation:none` override would strand elements at their
+   opacity:0 start frame. Transitions degrade to "just visible". */
+@keyframes k-rise{from{transform:translateY(108%)}to{transform:translateY(0)}}
+@keyframes k-in{from{opacity:0}to{opacity:1}}
+@keyframes k-float{0%{transform:translateY(0)}50%{transform:translateY(-14px)}100%{transform:translateY(0)}}
+@keyframes k-ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes k-pop{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:scale(1)}}
+
+.rise{display:block;overflow:hidden;padding-bottom:.08em}
+.rise>span{display:block;animation:k-rise 620ms var(--ease) both;animation-delay:var(--d,0ms)}
+.fade{animation:k-in 400ms var(--ease) both;animation-delay:var(--d,0ms)}
+.pop{animation:k-pop 560ms var(--ease) both,k-float var(--fdur,7s) var(--fdelay,1s) ease-in-out infinite;animation-delay:var(--d,0ms),var(--fdelay,1s)}
+.float{animation:k-float 7s ease-in-out infinite}
+
+/* Scroll-revealed. Gated behind .js (set synchronously in <head>) so the hidden
+   start state only ever applies when JS is definitely running — otherwise a
+   blocked or failed script would leave the whole page blank. */
+.draw{height:2px;background:var(--orange-300);transform-origin:left center}
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity 520ms var(--ease),transform 520ms var(--ease);transition-delay:var(--d,0ms)}
+.js .rv.in{opacity:1;transform:none}
+.js .draw{transform:scaleX(0);transition:transform 1100ms var(--ease) 200ms}
+.js .draw.in{transform:scaleX(1)}
+/* Fallback path: land on the visible state outright, with no transition to wait on. */
+.js .rv.now,.js .draw.now{transition:none}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *{animation:none !important}
+  .js .rv{opacity:1;transform:none;transition:none}
+  .js .draw{transform:scaleX(1);transition:none}
+}
 
 /* buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);height:var(--control-h-md);padding:0 22px;font-family:var(--font-text);font-size:var(--fs-body);font-weight:var(--fw-medium);border-radius:var(--radius-button);border:var(--border-w) solid transparent;cursor:pointer;transition:var(--transition-control),transform var(--dur-fast) var(--ease-standard);white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);height:var(--control-h-md);padding:0 22px;font-family:var(--font-text);font-size:var(--fs-body);font-weight:var(--fw-medium);border-radius:var(--radius-button);border:var(--border-w) solid transparent;cursor:pointer;transition:var(--transition-control),transform var(--dur-fast) var(--ease);white-space:nowrap}
 .btn:active{transform:scale(.98)}
 .btn-sm{height:var(--control-h-sm);padding:0 16px;font-size:var(--fs-body-sm)}
 .btn-lg{height:var(--control-h-lg);padding:0 28px;font-size:var(--fs-body-lg)}
@@ -97,118 +131,93 @@ img,svg{max-width:100%}
 .btn-primary:active{background:var(--brand-press)}
 .btn-secondary{background:transparent;color:var(--brand);border-color:var(--border-brand)}
 .btn-secondary:hover{background:var(--brand-tint);color:var(--brand)}
-.btn-inverse{background:var(--white);color:var(--brand)}
-.btn-inverse:hover{background:var(--ink-100);color:var(--brand)}
 
 /* card */
 .card{background:var(--surface-card);border:var(--border-w) solid var(--border-card);border-radius:var(--radius-card);box-shadow:var(--shadow-card);transition:var(--transition-lift);padding:var(--sp-6)}
 .card-i:hover{box-shadow:var(--shadow-card-hover);transform:translateY(-4px)}
-/* Service cards: no overflow clip — the icon tile overhangs the top edge on purpose. */
+/* Service cards must not clip — the icon tile overhangs the top edge. */
 .card-flush{padding:0;height:100%}
-/* Work cards: clip, so the screenshot's corners follow the card radius. */
+/* Work cards clip, so the screenshot corners follow the card radius. */
 .card-clip{padding:0;overflow:hidden;height:100%}
 
-/* header */
-header{background:var(--surface-page);position:sticky;top:0;z-index:40;border-bottom:var(--border-w) solid transparent}
-header.scrolled{border-bottom-color:var(--border-card)}
-.nav-row{max-width:var(--container-max);margin:0 auto;padding:0 var(--gutter);min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-6)}
-/* Not flex: a flex container drops the whitespace text node, welding "Sahyog" to "Hub". */
+/* header — not sticky, per the design */
+header{max-width:var(--container-max);margin:0 auto;padding:0 var(--gutter);min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-6)}
+/* Not flex: a flex container drops the whitespace node, welding "Sahyog" to "Hub". */
 .wordmark{font-family:var(--font-display);font-weight:var(--fw-semibold);font-size:22px;letter-spacing:-.01em;color:var(--text-heading);display:inline-block;line-height:44px}
 .wordmark:hover{color:var(--text-heading)}
-.nav-links{display:flex;align-items:center;gap:var(--sp-8)}
-.nav-links a{display:flex;align-items:center;min-height:44px;font-size:var(--fs-body);color:var(--text-heading);font-weight:var(--fw-regular)}
-.nav-links a:hover{color:var(--brand)}
-.nav-links a.on{color:var(--brand);font-weight:var(--fw-medium)}
 .nav-desk{display:flex;align-items:center;gap:var(--sp-8)}
+.nav-links{display:flex;align-items:center;gap:var(--sp-8)}
+.nav-links a{display:flex;align-items:center;min-height:44px;font-size:var(--fs-body);color:var(--text-heading)}
+.nav-links a:hover{color:var(--brand)}
 .burger{display:none;align-items:center;justify-content:center;width:44px;height:44px;padding:0;background:none;border:none;cursor:pointer;color:var(--text-heading);border-radius:var(--r-xs)}
 .drawer{display:none;border-top:var(--border-w) solid var(--border-card);background:var(--surface-card)}
 .drawer.open{display:block}
 .drawer-in{max-width:var(--container-max);margin:0 auto;padding:var(--sp-3) var(--gutter) var(--sp-6);display:flex;flex-direction:column}
 .drawer-in a{display:flex;align-items:center;min-height:52px;font-size:var(--fs-body-lg);color:var(--text-heading)}
-.drawer-in a.on{color:var(--brand);font-weight:var(--fw-medium)}
 @media(max-width:859px){.nav-desk{display:none}.burger{display:flex}}
 
-/* pages */
-.page{display:none}
-.page.active{display:block}
-
 /* hero */
-.hero{position:relative;overflow:hidden;padding:var(--sp-16) 0 clamp(var(--sp-16),8vw,var(--sp-24))}
-.hero-grid{position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(var(--sp-10),5vw,var(--sp-16));align-items:center}
-.hero h1{font-family:var(--font-display);font-size:clamp(32px,5.4vw,var(--fs-display));line-height:var(--lh-tight);letter-spacing:var(--ls-display);font-weight:var(--fw-bold);margin:0;text-wrap:pretty}
-.hero p.lead{margin:var(--sp-5) 0 0;font-size:var(--fs-body-lg);line-height:var(--lh-body);color:var(--text-body);max-width:33em;text-wrap:pretty}
-.hero-ctas{display:flex;flex-wrap:wrap;gap:var(--sp-3);margin-top:var(--sp-8)}
-.confetti{position:absolute;top:0;right:0;width:46%;height:100%;pointer-events:none}
+.hero{position:relative;overflow:hidden;padding:clamp(var(--sp-10),6vw,var(--sp-20)) 0 0}
+.hero h1{font-family:var(--font-display);font-size:clamp(34px,6.4vw,88px);line-height:1.02;letter-spacing:-.03em;font-weight:var(--fw-bold);margin:var(--sp-6) 0 0;max-width:15em}
+.hero-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(var(--sp-6),4vw,var(--sp-12));align-items:end;padding-top:clamp(var(--sp-8),4vw,var(--sp-12))}
+.hero-grid p{margin:0;font-size:var(--fs-body-lg);line-height:var(--lh-body);color:var(--text-body);max-width:30em;text-wrap:pretty}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:var(--sp-3)}
+.hero-art{display:flex;align-items:flex-end;justify-content:center;gap:clamp(var(--sp-4),4vw,var(--sp-16));padding-top:clamp(var(--sp-10),5vw,var(--sp-16))}
+.confetti{position:absolute;top:0;right:0;width:34%;height:300px;pointer-events:none}
 .confetti i{position:absolute;border-radius:var(--r-circle);background:var(--brand);display:block}
 @media(max-width:859px){.confetti{display:none}}
 
+/* ticker */
+.ticker{overflow:hidden;background:var(--brand);color:var(--white);padding:var(--sp-4) 0}
+.ticker-track{display:flex;width:max-content;animation:k-ticker 30s linear infinite}
+.ticker-track span.grp{display:flex;gap:var(--sp-10);padding-right:var(--sp-10);font-family:var(--font-display);font-size:var(--fs-body);letter-spacing:var(--ls-caps);text-transform:uppercase;white-space:nowrap}
+
 /* section heading */
 .sh{text-align:center;max-width:620px;margin:0 auto}
-.sh h2{font-size:clamp(26px,4vw,var(--fs-h2));font-weight:var(--fw-bold);letter-spacing:var(--ls-heading)}
+.sh h2{font-size:clamp(26px,4vw,34px);font-weight:var(--fw-bold);letter-spacing:var(--ls-heading)}
 .sh p{margin:var(--sp-3) 0 0;font-size:var(--fs-body-sm);color:var(--text-muted);line-height:var(--lh-body)}
-.sh-left{text-align:left;max-width:none;margin:0}
 
-/* service tiles */
-.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:var(--sp-6);padding-top:var(--sp-12)}
-.svc{position:relative;padding-top:34px;height:100%}
+/* services */
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:var(--sp-6);padding-top:var(--sp-12)}
+.svc{position:relative;padding-top:34px}
 .svc-tile{position:absolute;top:-14px;left:22px;width:54px;height:54px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-tile);box-shadow:var(--shadow-tile);color:var(--white)}
 .svc-body{padding:var(--sp-6)}
 .svc-body h3{font-family:var(--font-display);font-size:var(--fs-h4);font-weight:var(--fw-semibold);margin:0 0 var(--sp-2)}
-.svc-body p{margin:0;font-size:var(--fs-body-sm);line-height:var(--lh-body);color:var(--text-muted);text-wrap:pretty}
-.svc-body a{display:inline-flex;align-items:center;min-height:44px;margin-top:var(--sp-1);font-size:var(--fs-caption);font-weight:var(--fw-medium)}
-
-/* two column */
-.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(var(--sp-10),5vw,var(--sp-16));align-items:center}
-
-/* steps */
-.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--sp-5)}
-.steps li{display:flex;align-items:flex-start;gap:var(--sp-4)}
-.steps b{flex:0 0 auto;width:32px;height:32px;border-radius:var(--r-circle);background:var(--brand);color:var(--white);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:var(--fs-body-sm);font-weight:var(--fw-semibold)}
-.steps strong{display:block;font-family:var(--font-display);font-size:var(--fs-h4);font-weight:var(--fw-semibold);color:var(--text-heading)}
-.steps span{display:block;font-size:var(--fs-body-sm);color:var(--text-muted)}
+.svc-body>p{margin:0;font-size:var(--fs-body-sm);line-height:var(--lh-body);color:var(--text-muted);text-wrap:pretty}
+.pts{margin:var(--sp-5) 0 0;padding:0;list-style:none;display:grid;gap:var(--sp-2);font-size:var(--fs-body-sm);color:var(--text-body)}
+.pts li{display:grid;grid-template-columns:14px 1fr;gap:var(--sp-2);align-items:start}
+.pts i{display:block;width:6px;height:6px;margin-top:8px;border-radius:var(--r-pill);background:var(--brand)}
 
 /* work */
 .work-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:var(--sp-6);padding-bottom:var(--sp-12)}
-.work-head h2{font-family:var(--font-display);font-size:clamp(28px,3.8vw,var(--fs-h2));font-weight:var(--fw-bold);margin:var(--sp-3) 0 0;max-width:20em;text-wrap:pretty}
+.work-head h2{font-family:var(--font-display);font-size:clamp(28px,3.8vw,46px);font-weight:var(--fw-bold);margin:var(--sp-3) 0 0;max-width:20em;text-wrap:pretty}
 .work-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:clamp(var(--sp-6),2vw,var(--sp-8))}
-.work-grid a{display:block;min-width:0;color:inherit}
-.work-grid a:hover{color:inherit}
+.work-grid>a{display:block;min-width:0;color:inherit;border-radius:var(--radius-card)}
+.work-grid>a:hover{color:inherit}
 .work-shot{width:100%;height:190px;object-fit:cover;object-position:top center;display:block;background:var(--surface-warm)}
 .work-body{padding:var(--sp-6);display:flex;flex-direction:column;gap:var(--sp-2)}
 .work-body h3{font-family:var(--font-display);font-size:var(--fs-h4);font-weight:var(--fw-semibold);margin:0}
-.work-body p{margin:0;font-size:var(--fs-body-sm);line-height:var(--lh-body);color:var(--text-muted)}
+.work-body p{margin:0;font-size:var(--fs-body-sm);line-height:var(--lh-body);color:var(--text-muted);text-wrap:pretty}
 .work-top{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3)}
 .live{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-micro);letter-spacing:var(--ls-caps);text-transform:uppercase;color:var(--text-muted);white-space:nowrap}
 .live::before{content:"";width:7px;height:7px;border-radius:var(--r-circle);background:var(--accent-green);flex:0 0 auto}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--sp-1)}
 .tags span{font-size:var(--fs-micro);line-height:1;padding:6px 10px;border-radius:var(--r-pill);background:var(--surface-warm);color:var(--ink-700);white-space:nowrap}
-.work-url{display:inline-flex;align-items:center;gap:6px;margin-top:var(--sp-2);font-size:var(--fs-caption);font-weight:var(--fw-medium);color:var(--brand);overflow-wrap:anywhere}
-.work-grid a:hover .work-url{color:var(--brand-hover);text-decoration:underline}
+.work-url{display:inline-flex;align-items:center;min-height:44px;font-size:var(--fs-caption);font-weight:var(--fw-medium);color:var(--brand);overflow-wrap:anywhere}
+.work-grid>a:hover .work-url{color:var(--brand-hover);text-decoration:underline}
 
-/* work page */
-.wp-hero{width:100%;height:clamp(260px,38vw,460px);object-fit:cover;object-position:top center;border-radius:var(--r-md);display:block;background:var(--surface-warm)}
-.wp-split{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(var(--sp-5),4vw,var(--sp-16));align-items:start;padding-top:var(--sp-8)}
-.wp-split h2{font-family:var(--font-display);font-size:clamp(30px,4.4vw,var(--fs-h1));font-weight:var(--fw-bold);letter-spacing:var(--ls-display);line-height:var(--lh-tight);margin:0;min-width:0;text-wrap:pretty}
-.wp-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(var(--sp-10),4vw,var(--sp-12));padding-top:clamp(var(--sp-16),8vw,var(--sp-24))}
-.wp-small{width:100%;height:clamp(200px,24vw,280px);object-fit:cover;object-position:top center;border-radius:var(--r-md);display:block;background:var(--surface-warm)}
-.wp-pair h3{font-family:var(--font-display);font-size:var(--fs-h3);font-weight:var(--fw-semibold);margin:var(--sp-2) 0 var(--sp-3);text-wrap:pretty}
-.link-arrow{display:inline-flex;align-items:center;min-height:44px;margin-top:var(--sp-2);font-weight:var(--fw-medium);font-size:var(--fs-body-sm)}
-
-/* services page */
-.svc-sec{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(var(--sp-10),5vw,var(--sp-16));align-items:center;padding-top:clamp(var(--sp-12),6vw,var(--sp-20))}
-.svc-sec h2{font-family:var(--font-display);font-size:clamp(26px,3.6vw,var(--fs-h2));font-weight:var(--fw-bold);margin:var(--sp-3) 0 var(--sp-4);text-wrap:pretty}
-.svc-sec p{margin:0;font-size:var(--fs-body);line-height:var(--lh-body);color:var(--text-body);text-wrap:pretty}
-.ticks{margin:var(--sp-6) 0 0;padding:0;list-style:none;display:grid;gap:var(--sp-3);font-size:var(--fs-body-sm);color:var(--text-body)}
-.ticks li{display:flex;gap:var(--sp-3);align-items:flex-start}
-.ticks svg{flex:0 0 auto;margin-top:3px;color:var(--brand)}
-.svc-sub h3{font-family:var(--font-display);font-size:var(--fs-h4);font-weight:var(--fw-semibold);margin:0 0 var(--sp-3)}
+/* process */
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:clamp(var(--sp-6),3vw,var(--sp-10));padding-top:var(--sp-8)}
+.step-num{display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:var(--r-pill);background:var(--brand);color:var(--white);font-family:var(--font-display);font-weight:var(--fw-bold);font-size:var(--fs-body)}
+.steps-grid h3{font-family:var(--font-display);font-size:var(--fs-h4);font-weight:var(--fw-semibold);margin:var(--sp-5) 0 var(--sp-2);text-wrap:pretty}
+.steps-grid p{margin:0;font-size:var(--fs-body-sm);line-height:var(--lh-body);color:var(--text-muted);text-wrap:pretty}
 
 /* contact */
-.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(var(--sp-10),5vw,var(--sp-16));align-items:start}
-.contact-grid h1{font-family:var(--font-display);font-size:clamp(30px,4.6vw,var(--fs-h1));font-weight:var(--fw-bold);letter-spacing:var(--ls-display);line-height:var(--lh-tight);margin:0;text-wrap:pretty}
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(var(--sp-10),5vw,var(--sp-16));align-items:start}
+.contact-grid h2{font-family:var(--font-display);font-size:clamp(28px,4vw,var(--fs-h1));font-weight:var(--fw-bold);letter-spacing:var(--ls-display);line-height:var(--lh-tight);margin:0;text-wrap:pretty}
 .contact-list{display:grid;gap:var(--sp-3);margin-top:var(--sp-10)}
-.contact-list a{display:block;color:var(--text-heading)}
-.contact-list a:hover{color:var(--text-heading)}
+.contact-list>a{display:block;color:var(--text-heading)}
+.contact-list>a:hover{color:var(--text-heading)}
 .contact-list .card{padding:var(--sp-4) var(--sp-5);font-size:var(--fs-body);display:flex;align-items:center;gap:var(--sp-3)}
 .contact-list svg{flex:0 0 auto;color:var(--brand)}
 .field{display:flex;flex-direction:column;gap:var(--sp-2)}
@@ -225,122 +234,151 @@ header.scrolled{border-bottom-color:var(--border-card)}
    after the .field rules above — same specificity, so source order decides. */
 @media(max-width:859px){.field input,.field select,.field textarea{font-size:16px}}
 
-/* cta banner */
-.cta-wrap{max-width:var(--container-max);margin:0 auto;padding:0 var(--gutter);position:relative;z-index:1;transform:translateY(50%)}
-.cta{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-6);background:var(--brand);border-radius:var(--radius-card);padding:var(--sp-6) var(--sp-8);box-shadow:var(--shadow-float);flex-wrap:wrap}
-.cta h3{color:var(--white);font-size:var(--fs-h3);font-weight:var(--fw-semibold)}
-
 /* footer */
 footer{background:var(--surface-warm);padding-top:var(--sp-12)}
-.foot-grid{max-width:var(--container-max);margin:0 auto;padding:var(--sp-16) var(--gutter) var(--sp-12);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:var(--sp-10) var(--sp-16)}
+.foot-grid{max-width:var(--container-max);margin:0 auto;padding:var(--sp-16) var(--gutter) var(--sp-12);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:var(--sp-10)}
 .foot-col{display:flex;flex-direction:column;min-width:0}
 .foot-col b{font-family:var(--font-display);font-size:var(--fs-body);font-weight:var(--fw-semibold);color:var(--text-heading);margin-bottom:var(--sp-2)}
 .foot-col a,.foot-col span.li{display:flex;align-items:center;min-height:44px;font-size:var(--fs-body-sm);color:var(--text-body);overflow-wrap:anywhere}
 .foot-col a:hover{color:var(--brand)}
-.socials{display:flex;gap:var(--sp-2)}
-.socials a{width:42px;height:42px;border-radius:var(--r-circle);background:var(--brand);color:var(--white);display:flex;align-items:center;justify-content:center;transition:var(--transition-control)}
-.socials a:hover{background:var(--brand-hover);color:var(--white)}
 .foot-bar{background:var(--brand);color:var(--white);text-align:center;padding:var(--sp-3);font-size:var(--fs-caption);text-wrap:pretty}
 </style>
 </head>
-<body>
+<body id="top">
 
-<header id="hdr">
-  <div class="nav-row">
-    <a class="wordmark" href="#/" data-nav>Sah<span class="accent">yog</span> Hub</a>
-    <div class="nav-desk">
-      <nav class="nav-links">
-        <a href="#/" data-nav data-page="home">Home</a>
-        <a href="#/services" data-nav data-page="services">Services</a>
-        <a href="#/work" data-nav data-page="work">Work</a>
-        <a href="#/contact" data-nav data-page="contact">Contact</a>
-      </nav>
-      <a class="btn btn-primary btn-sm" href="#/contact" data-nav>Get A Quote</a>
-    </div>
-    <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
-      <svg id="burger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button>
+<header class="fade">
+  <a class="wordmark" href="#top">Sah<span class="accent">yog</span> Hub</a>
+  <div class="nav-desk">
+    <nav class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#process">Process</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="#contact">Get A Quote</a>
   </div>
-  <div class="drawer" id="drawer">
-    <div class="drawer-in">
-      <a href="#/" data-nav data-page="home">Home</a>
-      <a href="#/services" data-nav data-page="services">Services</a>
-      <a href="#/work" data-nav data-page="work">Work</a>
-      <a href="#/contact" data-nav data-page="contact">Contact</a>
-      <div style="padding-top:var(--sp-3)"><a class="btn btn-primary btn-lg btn-block" href="#/contact" data-nav>Get A Quote</a></div>
-    </div>
-  </div>
+  <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
+    <svg id="burger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
 </header>
+<div class="drawer" id="drawer">
+  <div class="drawer-in">
+    <a href="#services">Services</a>
+    <a href="#work">Work</a>
+    <a href="#process">Process</a>
+    <a href="#contact">Contact</a>
+    <div style="padding-top:var(--sp-3)"><a class="btn btn-primary btn-lg btn-block" href="#contact">Get A Quote</a></div>
+  </div>
+</div>
 
-<!-- ============ HOME ============ -->
-<main class="page" id="page-home">
+<main>
 
   <section class="hero">
-    <span class="confetti" aria-hidden="true">
-      <i style="left:12%;top:18%;width:9px;height:9px;opacity:.5"></i>
-      <i style="left:32%;top:8%;width:6px;height:6px;opacity:.4"></i>
-      <i style="left:58%;top:22%;width:11px;height:11px;opacity:.3"></i>
-      <i style="left:78%;top:10%;width:7px;height:7px;opacity:.55"></i>
-      <i style="left:88%;top:36%;width:5px;height:5px;opacity:.45"></i>
-      <i style="left:22%;top:62%;width:8px;height:8px;opacity:.35"></i>
+    <span class="confetti fade" style="--d:500ms" aria-hidden="true">
+      <i style="left:14%;top:22%;width:9px;height:9px;opacity:.5"></i>
+      <i style="left:36%;top:8%;width:6px;height:6px;opacity:.4"></i>
+      <i style="left:58%;top:30%;width:11px;height:11px;opacity:.3"></i>
+      <i style="left:78%;top:12%;width:7px;height:7px;opacity:.55"></i>
+      <i style="left:88%;top:46%;width:5px;height:5px;opacity:.45"></i>
+      <i style="left:24%;top:62%;width:8px;height:8px;opacity:.35"></i>
       <i style="left:66%;top:74%;width:10px;height:10px;opacity:.3"></i>
-      <i style="left:44%;top:88%;width:6px;height:6px;opacity:.5"></i>
-      <i style="left:92%;top:66%;width:8px;height:8px;opacity:.4"></i>
+      <i style="left:46%;top:88%;width:6px;height:6px;opacity:.5"></i>
     </span>
-    <div class="wrap hero-grid">
-      <div style="min-width:0">
-        <div class="eyebrow" style="margin-bottom:var(--sp-4)">सहयोग · Together, we build</div>
-        <h1>Websites, apps and ads that <span class="accent">pay for themselves</span>.</h1>
-        <p class="lead">Sahyog Hub builds the digital presence of local businesses end to end — the site, the app and the ad campaign, from one small team.</p>
-        <div class="hero-ctas">
-          <a class="btn btn-primary btn-lg" href="#/contact" data-nav>Get A Quote</a>
-          <a class="btn btn-secondary btn-lg" href="#/work" data-nav>See Our Work</a>
+    <div class="wrap" style="position:relative">
+      <div class="eyebrow rv" style="--d:60ms">सहयोग · Together, we build</div>
+      <h1>
+        <span class="rise"><span style="--d:140ms">Websites, apps and ads</span></span>
+        <span class="rise"><span style="--d:260ms">that <span class="accent">pay for themselves</span>.</span></span>
+      </h1>
+      <div class="hero-grid">
+        <p class="rv" style="--d:400ms">We build the digital presence of local businesses end to end — the site, the app and the ad campaign, from one small team.</p>
+        <div class="hero-ctas rv" style="--d:500ms">
+          <a class="btn btn-primary btn-lg" href="#contact">Get A Quote</a>
+          <a class="btn btn-secondary btn-lg" href="#work">See Our Work</a>
         </div>
       </div>
-      <picture style="display:block;width:100%;max-width:470px;margin-left:auto"><source srcset="assets/ill-desk-charts.webp" type="image/webp"><img src="assets/ill-desk-charts.png" alt="Working at a desk with analytics charts" width="658" height="802" fetchpriority="high" style="width:100%;height:auto;display:block"></picture>
+      <div class="hero-art">
+        <picture class="pop" style="--d:620ms;--fdur:7s;--fdelay:1.2s;display:block;width:28%;max-width:250px">
+          <source srcset="assets/ill-whiteboard.webp" type="image/webp">
+          <img src="assets/ill-whiteboard.png" alt="Presenting a project flow on a whiteboard" width="668" height="748" style="width:100%;height:auto;display:block">
+        </picture>
+        <picture class="pop" style="--d:720ms;--fdur:6s;--fdelay:1.4s;display:block;width:34%;max-width:320px">
+          <source srcset="assets/ill-desk-charts.webp" type="image/webp">
+          <img src="assets/ill-desk-charts.png" alt="Working at a desk with analytics charts" width="658" height="802" fetchpriority="high" style="width:100%;height:auto;display:block">
+        </picture>
+        <picture class="pop" style="--d:820ms;--fdur:8s;--fdelay:1s;display:block;width:28%;max-width:250px">
+          <source srcset="assets/ill-bean-mail.webp" type="image/webp">
+          <img src="assets/ill-bean-mail.png" alt="Campaign notifications arriving" width="658" height="702" style="width:100%;height:auto;display:block">
+        </picture>
+      </div>
     </div>
   </section>
 
-  <section class="sec sec-warm">
+  <div class="ticker fade" style="--d:900ms">
+    <div class="ticker-track">
+      <span class="grp"><span>Websites</span><span>Applications</span><span>Marketing ads</span><span>सहयोग — together, we build</span><span>Websites</span><span>Applications</span><span>Marketing ads</span><span>सहयोग — together, we build</span></span>
+      <span class="grp" aria-hidden="true"><span>Websites</span><span>Applications</span><span>Marketing ads</span><span>सहयोग — together, we build</span><span>Websites</span><span>Applications</span><span>Marketing ads</span><span>सहयोग — together, we build</span></span>
+    </div>
+  </div>
+
+  <section class="sec" id="services">
     <div class="wrap">
-      <div class="sh">
+      <div class="sh rv">
         <h2>What We <span class="accent">Build</span></h2>
         <p>Three services that work better together than they do apart.</p>
       </div>
       <div class="svc-grid">
-        <div class="card card-i card-flush">
-          <div class="svc">
-            <div class="svc-tile" style="background:var(--accent-yellow)">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-            </div>
-            <div class="svc-body">
-              <h3>Websites</h3>
-              <p>Fast, responsive sites built to convert — from a one-page brochure to a clickable plot map.</p>
-              <a href="#/services#svc-websites" data-nav>Read More →</a>
-            </div>
-          </div>
-        </div>
-        <div class="card card-i card-flush">
-          <div class="svc">
-            <div class="svc-tile" style="background:var(--accent-green)">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
-            </div>
-            <div class="svc-body">
-              <h3>Apps</h3>
-              <p>Web and mobile tools for your operations or your customers, on a stack we can maintain.</p>
-              <a href="#/services#svc-apps" data-nav>Read More →</a>
+        <div class="rv" style="--d:0ms">
+          <div class="card card-i card-flush">
+            <div class="svc">
+              <div class="svc-tile" style="background:var(--accent-yellow)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              </div>
+              <div class="svc-body">
+                <h3>Websites</h3>
+                <p>Fast, responsive sites built to convert — a brochure page, a bilingual menu, or a clickable plot map.</p>
+                <ul class="pts">
+                  <li><i></i><span>Launch in two to four weeks</span></li>
+                  <li><i></i><span>Hindi and English where it counts</span></li>
+                  <li><i></i><span>Hosting and domain set up for you</span></li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
-        <div class="card card-i card-flush">
-          <div class="svc">
-            <div class="svc-tile" style="background:var(--accent-violet)">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+        <div class="rv" style="--d:120ms">
+          <div class="card card-i card-flush">
+            <div class="svc">
+              <div class="svc-tile" style="background:var(--accent-green)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+              </div>
+              <div class="svc-body">
+                <h3>Applications</h3>
+                <p>Web and mobile tools for your operations or your customers, on a stack we can maintain.</p>
+                <ul class="pts">
+                  <li><i></i><span>Orders, catalogues, bookings, stock</span></li>
+                  <li><i></i><span>WhatsApp checkout, no login wall</span></li>
+                  <li><i></i><span>Data you can edit yourself</span></li>
+                </ul>
+              </div>
             </div>
-            <div class="svc-body">
-              <h3>Marketing Ads</h3>
-              <p>Instagram and Facebook campaigns, geo-targeted to the radius that matters.</p>
-              <a href="#/services#svc-ads" data-nav>Read More →</a>
+          </div>
+        </div>
+        <div class="rv" style="--d:240ms">
+          <div class="card card-i card-flush">
+            <div class="svc">
+              <div class="svc-tile" style="background:var(--accent-violet)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+              </div>
+              <div class="svc-body">
+                <h3>Marketing Ads</h3>
+                <p>Instagram and Facebook campaigns, geo-targeted to the radius that actually matters.</p>
+                <ul class="pts">
+                  <li><i></i><span>Feed, story and reel creative</span></li>
+                  <li><i></i><span>Lead forms straight to WhatsApp</span></li>
+                  <li><i></i><span>Monthly report in plain language</span></li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -348,68 +386,47 @@ footer{background:var(--surface-warm);padding-top:var(--sp-12)}
     </div>
   </section>
 
-  <section class="sec">
-    <div class="wrap two">
-      <div style="min-width:0">
-        <div class="sh sh-left">
-          <h2>Simple <span class="accent">Solutions!</span></h2>
-          <p>Four steps from first message to a site that is live and earning.</p>
-        </div>
-        <div style="padding-top:var(--sp-8)">
-          <ol class="steps">
-            <li><b>1</b><span><strong>Tell us the goal</strong><span>One call to understand the business and what a win looks like</span></span></li>
-            <li><b>2</b><span><strong>Scope and quote</strong><span>A fixed price and a date, in writing, before anything starts</span></span></li>
-            <li><b>3</b><span><strong>Build and review</strong><span>You see it as it is built, not at the end</span></span></li>
-            <li><b>4</b><span><strong>Launch and market</strong><span>Live on your domain, with the ad campaign ready to run</span></span></li>
-          </ol>
-        </div>
-      </div>
-      <picture style="display:block;width:100%;max-width:400px;margin:0 auto"><source srcset="assets/ill-whiteboard.webp" type="image/webp"><img src="assets/ill-whiteboard.png" alt="Presenting a project flow on a whiteboard" width="668" height="748" loading="lazy" decoding="async" style="width:100%;height:auto;display:block"></picture>
-    </div>
-  </section>
-
-  <section class="sec sec-warm">
+  <section class="sec sec-warm" id="work">
     <div class="wrap-wide">
-      <div class="work-head">
+      <div class="work-head rv">
         <div style="min-width:0">
           <div class="eyebrow">Recent Work</div>
           <h2>Three businesses, three problems, <span class="accent">three live sites</span>.</h2>
         </div>
-        <a class="btn btn-secondary" href="#/work" data-nav>See All Work</a>
       </div>
       <div class="work-grid">
-        <a href="https://meeraresidency.sahyoghub.com/" target="_blank" rel="noopener">
+        <a class="rv" style="--d:0ms" href="https://meeraresidency.sahyoghub.com/" target="_blank" rel="noopener">
           <div class="card card-i card-clip">
-            <img class="work-shot" src="assets/case-study-meera.png" alt="Meera Residency website" loading="lazy">
+            <img class="work-shot" src="assets/case-study-meera.png" alt="Meera Residency website" loading="lazy" decoding="async">
             <div class="work-body">
               <div class="work-top"><span class="eyebrow">Real Estate</span><span class="live">Live</span></div>
               <h3>Meera Residency, Nimbahera</h3>
-              <p>A clickable, zoomable map of all 71 plots, plus a bilingual Instagram kit for a 50km ad radius.</p>
+              <p>A clickable, zoomable plot map covering all 71 plots, plus a bilingual Instagram kit.</p>
               <div class="tags"><span>Interactive plot map</span><span>Hindi + English</span><span>WhatsApp enquiries</span></div>
               <span class="work-url">meeraresidency.sahyoghub.com →</span>
             </div>
           </div>
         </a>
-        <a href="https://shreeleela.sahyoghub.com/" target="_blank" rel="noopener">
+        <a class="rv" style="--d:120ms" href="https://shreeleela.sahyoghub.com/" target="_blank" rel="noopener">
           <div class="card card-i card-clip">
-            <img class="work-shot" src="assets/case-study-leela.jpg" alt="Shree Leela Restaurant website" loading="lazy">
+            <img class="work-shot" src="assets/case-study-leela.jpg" alt="Shree Leela Restaurant website" loading="lazy" decoding="async">
             <div class="work-body">
               <div class="work-top"><span class="eyebrow">Restaurant</span><span class="live">Live</span></div>
               <h3>Shree Leela Restaurant</h3>
-              <p>130 dishes across 19 categories, a working cart, and ordering placed straight over WhatsApp.</p>
+              <p>130 dishes across 19 categories, a cart, and ordering straight over WhatsApp.</p>
               <div class="tags"><span>130-item menu</span><span>Cart + checkout</span><span>Opening-hours gating</span></div>
               <span class="work-url">shreeleela.sahyoghub.com →</span>
             </div>
           </div>
         </a>
-        <a href="https://mewadgirfarms.sahyoghub.com/" target="_blank" rel="noopener">
+        <a class="rv" style="--d:240ms" href="https://mewadgirfarms.sahyoghub.com/" target="_blank" rel="noopener">
           <div class="card card-i card-clip">
-            <img class="work-shot" src="assets/case-study-mewad.jpg" alt="Mewad Gir Farms website" loading="lazy">
+            <img class="work-shot" src="assets/case-study-mewad.jpg" alt="Mewad Gir Farms website" loading="lazy" decoding="async">
             <div class="work-body">
               <div class="work-top"><span class="eyebrow">D2C Brand</span><span class="live">Live</span></div>
               <h3>Mewad Gir Farms</h3>
-              <p>A2 bilona ghee sold direct across India, with prices and daily batch data editable from one JSON file.</p>
-              <div class="tags"><span>Ships all-India</span><span>No backend</span><span>Owner-editable</span></div>
+              <p>Daily batch, litres churned and price run off a single JSON file — no backend.</p>
+              <div class="tags"><span>Ships all-India</span><span>Owner-editable</span><span>No backend</span></div>
               <span class="work-url">mewadgirfarms.sahyoghub.com →</span>
             </div>
           </div>
@@ -418,234 +435,132 @@ footer{background:var(--surface-warm);padding-top:var(--sp-12)}
     </div>
   </section>
 
+  <section class="sec" id="process">
+    <div class="wrap">
+      <div class="sh rv">
+        <h2>Simple <span class="accent">Solutions!</span></h2>
+        <p>Four steps from first message to a site that is live and earning.</p>
+      </div>
+      <div style="position:relative;padding-top:clamp(var(--sp-12),5vw,var(--sp-16))">
+        <div class="draw"></div>
+        <div class="steps-grid">
+          <div class="rv" style="--d:200ms">
+            <div class="step-num">1</div>
+            <h3>Tell us the goal</h3>
+            <p>One call to understand the business and what a win looks like</p>
+          </div>
+          <div class="rv" style="--d:360ms">
+            <div class="step-num">2</div>
+            <h3>Scope and quote</h3>
+            <p>A fixed price and a date, in writing, before anything starts</p>
+          </div>
+          <div class="rv" style="--d:520ms">
+            <div class="step-num">3</div>
+            <h3>Build and review</h3>
+            <p>You see it as it is built, not at the end</p>
+          </div>
+          <div class="rv" style="--d:680ms">
+            <div class="step-num">4</div>
+            <h3>Launch and market</h3>
+            <p>Live on your domain, with the ad campaign ready to run</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="contact">
+    <div class="wrap contact-grid">
+      <div style="min-width:0">
+        <h2 class="rv">Let's build something <span class="accent">together</span>.</h2>
+        <p class="rv" style="--d:80ms;margin:var(--sp-5) 0 0;font-size:var(--fs-body-lg);line-height:var(--lh-body);color:var(--text-body);text-wrap:pretty">Tell us about your business and what you need. We reply the same day, on WhatsApp.</p>
+        <div class="contact-list rv" style="--d:160ms">
+          <a href="tel:+919566812835">
+            <div class="card card-i">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Call +91 95668 12835
+            </div>
+          </a>
+          <a href="https://wa.me/919566812835" target="_blank" rel="noopener">
+            <div class="card card-i">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.43 12.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35z"/></svg>
+              WhatsApp +91 95668 12835
+            </div>
+          </a>
+          <a href="mailto:vimaljkasp@gmail.com">
+            <div class="card card-i">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+              vimaljkasp@gmail.com
+            </div>
+          </a>
+        </div>
+        <picture class="float" style="display:block;width:100%;max-width:280px;margin-top:var(--sp-10)">
+          <source srcset="assets/ill-armchair-tablet.webp" type="image/webp">
+          <img src="assets/ill-armchair-tablet.png" alt="Reading a message on a tablet" width="694" height="758" loading="lazy" decoding="async" style="width:100%;height:auto;display:block">
+        </picture>
+      </div>
+
+      <div class="card rv" style="--d:120ms;padding:clamp(var(--sp-6),3vw,var(--sp-8))">
+        <form class="form-grid" id="quote" novalidate>
+          <div class="field">
+            <label for="f-name">Your name <i>*</i></label>
+            <input id="f-name" type="text" placeholder="Your full name" autocomplete="name">
+            <span class="err" id="e-name" hidden>Please tell us your name</span>
+          </div>
+          <div class="field">
+            <label for="f-phone">Phone or WhatsApp number <i>*</i></label>
+            <input id="f-phone" type="tel" placeholder="10-digit mobile number" autocomplete="tel" inputmode="numeric">
+            <span class="err" id="e-phone" hidden>Enter a 10-digit number so we can reply</span>
+          </div>
+          <div class="field">
+            <label for="f-biz">Business</label>
+            <input id="f-biz" type="text" placeholder="Business name and town" autocomplete="organization">
+          </div>
+          <div class="field">
+            <label for="f-svc">What do you need?</label>
+            <select id="f-svc">
+              <option>I need a website</option>
+              <option>I need an app</option>
+              <option>I need Instagram or Facebook ads</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-msg">Anything else</label>
+            <textarea id="f-msg" rows="3" placeholder="A line or two about the project"></textarea>
+          </div>
+          <button class="btn btn-primary btn-lg btn-block" type="submit">Send Via WhatsApp</button>
+          <p style="margin:0;font-size:var(--fs-caption);color:var(--text-muted)">Opens WhatsApp with your details pre-filled — nothing is stored on this site.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
 </main>
-
-<!-- ============ SERVICES ============ -->
-<main class="page" id="page-services" style="padding:var(--sp-16) 0 clamp(var(--sp-16),8vw,var(--sp-24))">
-  <div class="wrap">
-    <div class="sh">
-      <h2>We Provide The Best <span class="accent">Services</span></h2>
-      <p>Websites, apps and marketing ads — priced and scoped for local businesses.</p>
-    </div>
-
-    <div class="svc-sec" id="svc-websites">
-      <div style="min-width:0">
-        <div class="eyebrow">01 — Websites</div>
-        <h2>Sites built to <span class="accent">convert</span></h2>
-        <p>A single-page brochure site, a bilingual menu, or an interactive plot-selection map. Every site is fast, responsive, and yours to keep.</p>
-        <ul class="ticks">
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Design, build and launch in two to four weeks</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Hindi and English where your customers need it</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Hosting, domain and analytics set up for you</li>
-        </ul>
-      </div>
-      <picture style="display:block;width:100%;max-width:430px;margin:0 auto"><source srcset="assets/ill-desktop-code.webp" type="image/webp"><img src="assets/ill-desktop-code.png" alt="Building a website at a desktop" width="768" height="772" loading="lazy" decoding="async" style="width:100%;height:auto;display:block"></picture>
-    </div>
-
-    <div class="svc-sec" id="svc-apps">
-      <picture style="display:block;width:100%;max-width:430px;margin:0 auto"><source srcset="assets/ill-armchair-tablet.webp" type="image/webp"><img src="assets/ill-armchair-tablet.png" alt="Using an app on a tablet" width="694" height="758" loading="lazy" decoding="async" style="width:100%;height:auto;display:block"></picture>
-      <div style="min-width:0">
-        <div class="eyebrow">02 — Apps</div>
-        <h2>Tools your team will <span class="accent">actually use</span></h2>
-        <p>Internal operations or customer-facing, web or mobile. Built on a proven stack rather than a rushed prototype, so it still works a year from now.</p>
-        <ul class="ticks">
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Order taking, catalogues, bookings and stock</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>WhatsApp checkout where a login would lose the sale</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Data you can edit yourself, no backend to pay for</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="svc-sec" id="svc-ads">
-      <div style="min-width:0">
-        <div class="eyebrow">03 — Marketing Ads</div>
-        <h2>Ads that reach the <span class="accent">right radius</span></h2>
-        <p>Paid campaigns on Instagram and Facebook, aimed at the exact area and audience your business serves, with creative that matches the site we built.</p>
-        <div style="display:grid;gap:var(--sp-6);margin-top:var(--sp-8)">
-          <div class="svc-sub">
-            <h3>Instagram ads</h3>
-            <ul class="ticks" style="margin-top:0">
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Feed posts, story creative and reel templates</li>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Bilingual captions in Hindi and English</li>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Profile and highlight covers set up to match</li>
-            </ul>
-          </div>
-          <div class="svc-sub">
-            <h3>Facebook ads</h3>
-            <ul class="ticks" style="margin-top:0">
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Lead forms that reach you on WhatsApp</li>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Local audience and interest targeting</li>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Page and catalogue kept in step with the site</li>
-            </ul>
-          </div>
-          <div class="svc-sub">
-            <h3>Running both together</h3>
-            <ul class="ticks" style="margin-top:0">
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>One budget split across both platforms</li>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Geo-targeting down to a 50km radius</li>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Monthly report in plain language</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <picture style="display:block;width:100%;max-width:430px;margin:0 auto"><source srcset="assets/ill-bean-mail.webp" type="image/webp"><img src="assets/ill-bean-mail.png" alt="Campaign notifications arriving" width="658" height="702" loading="lazy" decoding="async" style="width:100%;height:auto;display:block"></picture>
-    </div>
-
-    <div style="padding-top:clamp(var(--sp-16),8vw,var(--sp-24));max-width:34em">
-      <p style="margin:0;font-size:var(--fs-body-lg);line-height:var(--lh-body);color:var(--text-body);text-wrap:pretty">Sahyog Hub takes on a small number of clients at a time, by design — so every project gets real attention, not a template.</p>
-      <p style="margin:var(--sp-4) 0 0;font-size:var(--fs-body-sm);color:var(--text-muted)">Rajasthan, India</p>
-    </div>
-  </div>
-</main>
-
-<!-- ============ WORK ============ -->
-<main class="page" id="page-work" style="padding:var(--sp-16) 0 clamp(var(--sp-16),8vw,var(--sp-24))">
-  <div class="wrap">
-    <div class="sh">
-      <h2>Recent <span class="accent">Work</span></h2>
-      <p>Every site below is live. Open any of them and see for yourself.</p>
-    </div>
-
-    <div style="padding-top:clamp(var(--sp-12),6vw,var(--sp-20))">
-      <div class="eyebrow" style="padding-bottom:var(--sp-5)">Real Estate</div>
-      <img class="wp-hero" src="assets/case-study-meera.png" alt="Meera Residency website" loading="lazy">
-      <div class="wp-split">
-        <h2>Meera Residency, Nimbahera</h2>
-        <div style="min-width:0">
-          <p style="margin:0;font-size:var(--fs-body);line-height:var(--lh-body);color:var(--text-body);text-wrap:pretty">A plot-sale project needed a website with a clickable, zoomable layout map, covering all 71 plots, plus a ready-to-post Instagram kit — feed posts, story creative and a reel template — in Hindi and English, targeted to a 50km radius around the site.</p>
-          <div class="tags"><span>71 plots mapped</span><span>Hindi + English</span><span>50km ad radius</span><span>WhatsApp enquiries</span></div>
-          <a class="link-arrow" href="https://meeraresidency.sahyoghub.com/" target="_blank" rel="noopener">meeraresidency.sahyoghub.com →</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="wp-pair">
-      <div style="min-width:0">
-        <img class="wp-small" src="assets/case-study-leela.jpg" alt="Shree Leela Restaurant website" loading="lazy">
-        <div class="eyebrow" style="margin-top:var(--sp-6)">Restaurant</div>
-        <h3>Shree Leela Restaurant</h3>
-        <p style="margin:0;font-size:var(--fs-body-sm);line-height:var(--lh-body);color:var(--text-body);text-wrap:pretty">A bilingual menu-and-ordering site for a pure-veg restaurant — no login, no backend. Visitors browse 130 dishes across 19 categories, build a cart, and place the order straight over WhatsApp. Live opening-hours gating disables ordering outside serving hours automatically.</p>
-        <div class="tags"><span>130 dishes</span><span>19 categories</span><span>Cart + checkout</span><span>Opening-hours gating</span></div>
-        <a class="link-arrow" href="https://shreeleela.sahyoghub.com/" target="_blank" rel="noopener">shreeleela.sahyoghub.com →</a>
-      </div>
-      <div style="min-width:0">
-        <img class="wp-small" src="assets/case-study-mewad.jpg" alt="Mewad Gir Farms website" loading="lazy">
-        <div class="eyebrow" style="margin-top:var(--sp-6)">D2C Brand</div>
-        <h3>Mewad Gir Farms</h3>
-        <p style="margin:0;font-size:var(--fs-body-sm);line-height:var(--lh-body);color:var(--text-body);text-wrap:pretty">A2 cultured bilona ghee from Gir cows, sold direct-to-home across India. Prices, contact details and daily batch data all live in one JSON file the owner edits himself — no backend to pay for — alongside a photo gallery of the farm and a WhatsApp order flow.</p>
-        <div class="tags"><span>Ships all-India</span><span>Owner-editable pricing</span><span>Farm photo gallery</span><span>No backend</span></div>
-        <a class="link-arrow" href="https://mewadgirfarms.sahyoghub.com/" target="_blank" rel="noopener">mewadgirfarms.sahyoghub.com →</a>
-      </div>
-    </div>
-  </div>
-</main>
-
-<!-- ============ CONTACT ============ -->
-<main class="page" id="page-contact" style="padding:var(--sp-16) 0 clamp(var(--sp-16),8vw,var(--sp-24))">
-  <div class="wrap contact-grid">
-    <div style="min-width:0">
-      <h1>Let's build something <span class="accent">together</span>.</h1>
-      <p style="margin:var(--sp-5) 0 0;font-size:var(--fs-body-lg);line-height:var(--lh-body);color:var(--text-body);text-wrap:pretty">Tell us about your business and what you need. We reply the same day, on WhatsApp.</p>
-      <div class="contact-list">
-        <a href="tel:+919566812835">
-          <div class="card card-i">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            Call +91 95668 12835
-          </div>
-        </a>
-        <a href="https://wa.me/919566812835" target="_blank" rel="noopener">
-          <div class="card card-i">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35z"/><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.25-4.38c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.17 8.17 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23z"/></svg>
-            WhatsApp +91 95668 12835
-          </div>
-        </a>
-        <a href="mailto:vimaljkasp@gmail.com">
-          <div class="card card-i">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
-            vimaljkasp@gmail.com
-          </div>
-        </a>
-      </div>
-      <picture style="display:block;width:100%;max-width:300px;margin-top:var(--sp-10)"><source srcset="assets/ill-armchair-tablet.webp" type="image/webp"><img src="assets/ill-armchair-tablet.png" alt="Reading a message on a tablet" width="694" height="758" loading="lazy" decoding="async" style="width:100%;height:auto;display:block"></picture>
-    </div>
-
-    <div class="card" style="padding:var(--sp-8)">
-      <h2 style="font-family:var(--font-display);font-size:var(--fs-h3);font-weight:var(--fw-semibold);margin:0 0 var(--sp-6)">Get a quote</h2>
-      <form class="form-grid" id="quote" novalidate>
-        <div class="field">
-          <label for="f-name">Your name <i>*</i></label>
-          <input id="f-name" type="text" placeholder="Your full name" autocomplete="name">
-          <span class="err" id="e-name" hidden>Please tell us your name</span>
-        </div>
-        <div class="field">
-          <label for="f-phone">Phone or WhatsApp number <i>*</i></label>
-          <input id="f-phone" type="tel" placeholder="10-digit mobile number" autocomplete="tel" inputmode="numeric">
-          <span class="err" id="e-phone" hidden>Enter a 10-digit number so we can reply</span>
-        </div>
-        <div class="field">
-          <label for="f-biz">Business</label>
-          <input id="f-biz" type="text" placeholder="Business name and town" autocomplete="organization">
-        </div>
-        <div class="field">
-          <label for="f-svc">What do you need?</label>
-          <select id="f-svc">
-            <option>I need a website</option>
-            <option>I need an app</option>
-            <option>I need Instagram or Facebook ads</option>
-            <option>Not sure yet</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="f-msg">Anything else</label>
-          <textarea id="f-msg" rows="3" placeholder="A line or two about the project"></textarea>
-        </div>
-        <button class="btn btn-primary btn-lg btn-block" type="submit">Send Via WhatsApp</button>
-        <p style="margin:0;font-size:var(--fs-caption);color:var(--text-muted)">Opens WhatsApp with your details pre-filled — nothing is stored on this site.</p>
-      </form>
-    </div>
-  </div>
-</main>
-
-<div class="cta-wrap" id="cta-wrap">
-  <div class="cta">
-    <h3>Ready to get started?</h3>
-    <a class="btn btn-inverse" href="#/contact" data-nav>Contact Us</a>
-  </div>
-</div>
 
 <footer>
   <div class="foot-grid">
     <div class="foot-col" style="gap:var(--sp-4)">
-      <span class="wordmark" style="min-height:auto">Sah<span class="accent">yog</span> Hub</span>
-      <div class="socials">
-        <a href="https://wa.me/919566812835" target="_blank" rel="noopener" aria-label="WhatsApp">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.86 9.86 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.43 12.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35z"/></svg>
-        </a>
-        <a href="mailto:vimaljkasp@gmail.com" aria-label="Email">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
-        </a>
-        <a href="tel:+919566812835" aria-label="Phone">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        </a>
-      </div>
+      <span class="wordmark" style="line-height:1">Sah<span class="accent">yog</span> Hub</span>
+      <p style="margin:0;font-size:var(--fs-body-sm);line-height:var(--lh-body);color:var(--text-muted);max-width:22em">सहयोग — together, we build. A small studio in Rajasthan.</p>
     </div>
     <div class="foot-col">
       <b>Services</b>
-      <a href="#/services#svc-websites" data-nav>Websites</a>
-      <a href="#/services#svc-apps" data-nav>Apps</a>
-      <a href="#/services#svc-ads" data-nav>Marketing Ads</a>
+      <a href="#services">Websites</a>
+      <a href="#services">Applications</a>
+      <a href="#services">Marketing Ads</a>
     </div>
     <div class="foot-col">
       <b>Work</b>
-      <a href="#/work" data-nav>Meera Residency</a>
-      <a href="#/work" data-nav>Shree Leela Restaurant</a>
-      <a href="#/work" data-nav>Mewad Gir Farms</a>
+      <a href="https://meeraresidency.sahyoghub.com/" target="_blank" rel="noopener">Meera Residency</a>
+      <a href="https://shreeleela.sahyoghub.com/" target="_blank" rel="noopener">Shree Leela Restaurant</a>
+      <a href="https://mewadgirfarms.sahyoghub.com/" target="_blank" rel="noopener">Mewad Gir Farms</a>
     </div>
     <div class="foot-col">
       <b>Contact</b>
       <a href="tel:+919566812835">+91 95668 12835</a>
       <a href="mailto:vimaljkasp@gmail.com">vimaljkasp@gmail.com</a>
-      <span class="li muted">Rajasthan, India</span>
+      <span class="li" style="color:var(--text-muted)">Rajasthan, India</span>
     </div>
   </div>
   <div class="foot-bar">© 2026 Sahyog Hub, Rajasthan, India · सहयोग — together, we build</div>
@@ -654,15 +569,12 @@ footer{background:var(--surface-warm);padding-top:var(--sp-12)}
 <script>
 (function(){
   "use strict";
-  var PAGES = ["home","services","work","contact"];
   var WA = "919566812835";
 
+  // ---- mobile drawer ----
   var drawer = document.getElementById("drawer");
   var burger = document.getElementById("burger");
   var burgerIcon = document.getElementById("burger-icon");
-  var ctaWrap = document.getElementById("cta-wrap");
-  var hdr = document.getElementById("hdr");
-
   var ICON_MENU = '<path d="M4 6h16M4 12h16M4 18h16"/>';
   var ICON_X = '<path d="M18 6 6 18M6 6l12 12"/>';
 
@@ -672,73 +584,60 @@ footer{background:var(--surface-warm);padding-top:var(--sp-12)}
     burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
     burgerIcon.innerHTML = open ? ICON_X : ICON_MENU;
   }
-
-  // "#/services#svc-apps" -> {page:"services", anchor:"svc-apps"}
-  function parseHash(){
-    var h = (location.hash || "").replace(/^#\/?/, "");
-    var parts = h.split("#");
-    var page = (parts[0] || "home").toLowerCase();
-    if (PAGES.indexOf(page) === -1) page = "home";
-    return { page: page, anchor: parts[1] || "" };
-  }
-
-  function render(){
-    var r = parseHash();
-    PAGES.forEach(function(p){
-      var el = document.getElementById("page-" + p);
-      if (el) el.classList.toggle("active", p === r.page);
-    });
-    document.querySelectorAll("[data-page]").forEach(function(a){
-      a.classList.toggle("on", a.getAttribute("data-page") === r.page);
-    });
-    // The CTA banner is a closing invitation — pointless on the page it links to.
-    ctaWrap.style.display = r.page === "contact" ? "none" : "";
-    setDrawer(false);
-
-    if (r.anchor){
-      var target = document.getElementById(r.anchor);
-      if (target){
-        var top = Math.max(0, target.getBoundingClientRect().top + window.pageYOffset - 92);
-        try { window.scrollTo({ top: top, behavior: "smooth" }); } catch (err) { /* older engines */ }
-        // Smooth scrolling is unreliable in embedded/preview contexts — it can be
-        // deferred indefinitely. Land it outright if it has not arrived.
-        setTimeout(function(){
-          if (Math.abs(window.pageYOffset - top) > 4){
-            var se = document.scrollingElement || document.documentElement;
-            se.scrollTop = top;
-          }
-        }, 380);
-        return;
-      }
-    }
-    window.scrollTo(0, 0);
-  }
-
-  // Same-hash clicks fire no hashchange, so re-render (and re-scroll) explicitly.
-  document.addEventListener("click", function(e){
-    var a = e.target.closest ? e.target.closest("a[data-nav]") : null;
-    if (!a) return;
-    if (a.getAttribute("href") === location.hash) { e.preventDefault(); render(); }
-  });
-
-  window.addEventListener("hashchange", render);
   burger.addEventListener("click", function(){ setDrawer(!drawer.classList.contains("open")); });
-  window.addEventListener("scroll", function(){
-    hdr.classList.toggle("scrolled", window.pageYOffset > 4);
-  }, { passive: true });
+  drawer.addEventListener("click", function(e){ if (e.target.closest("a")) setDrawer(false); });
+  window.addEventListener("resize", function(){ if (window.innerWidth >= 860) setDrawer(false); });
+
+  // ---- scroll reveal ----
+  // The design puts fixed animation-delays on every section, which fire on load —
+  // so anything below the fold finishes animating before it is ever seen. Reveal
+  // on intersection instead, which is what "kinetic" is actually reaching for.
+  var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var targets = document.querySelectorAll(".rv, .draw");
+
+  // "now" kills the transition, so the fallback does not depend on the page
+  // being painted for the content to actually become visible.
+  function revealAll(){ targets.forEach(function(el){ el.classList.add("now"); el.classList.add("in"); }); }
+
+  if (reduced || !("IntersectionObserver" in window)) {
+    revealAll();
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (!e.isIntersecting) return;
+        e.target.classList.add("in");
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    targets.forEach(function(el){ io.observe(el); });
+
+    // Anything already on screen at load should not wait for a scroll event.
+    var showVisible = function(){
+      targets.forEach(function(el){
+        if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add("in");
+      });
+    };
+    requestAnimationFrame(showVisible);
+
+    // Safety net. Neither IntersectionObserver nor rAF runs while a page is not
+    // being composited (background tab, some embedded viewers) — and since the
+    // start state is hidden, a stall there would show a blank page. Timers still
+    // fire, so force everything visible if the reveal has not happened by then.
+    setTimeout(function(){
+      if (!document.querySelector(".rv.in")) revealAll();
+    }, 1500);
+  }
 
   // ---- quote form -> WhatsApp ----
   var form = document.getElementById("quote");
   var fName = document.getElementById("f-name"), eName = document.getElementById("e-name");
   var fPhone = document.getElementById("f-phone"), ePhone = document.getElementById("e-phone");
-
   function digits(s){ return (s || "").replace(/[^\d]/g, ""); }
 
   form.addEventListener("submit", function(e){
     e.preventDefault();
     var nameOk = !!fName.value.trim();
     var phoneOk = digits(fPhone.value).length >= 10;
-
     eName.hidden = nameOk; fName.classList.toggle("bad", !nameOk);
     ePhone.hidden = phoneOk; fPhone.classList.toggle("bad", !phoneOk);
     if (!nameOk) { fName.focus(); return; }
@@ -760,8 +659,6 @@ footer{background:var(--surface-warm);padding-top:var(--sp-12)}
       if (el === fPhone && digits(fPhone.value).length >= 10) { ePhone.hidden = true; fPhone.classList.remove("bad"); }
     });
   });
-
-  render();
 })();
 </script>
 </body>
